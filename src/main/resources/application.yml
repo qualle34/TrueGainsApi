@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    password: 43q21
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/shapeup
+  sql:
+    init:
+      mode: always
+  jpa:
+    show-sql: true
