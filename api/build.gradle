@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.qualle.shapeup'
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+}

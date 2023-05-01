@@ -19,4 +19,8 @@ public class User {
     private String surname;
     private String birthday;
     private String gender;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Credentials credentials;
 }

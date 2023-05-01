@@ -1,1 +1,3 @@
 rootProject.name = 'shapeupnow'
+include 'api'
+include 'backend'

@@ -9,13 +9,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "credentials", schema = "public")
-public class Credentials {
+@Table(name = "size", schema = "public")
+public class Size {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private long userId;
-    private String login;
-    private String password;
+    private long id;
+    private String name;
+    private String type;
 }
