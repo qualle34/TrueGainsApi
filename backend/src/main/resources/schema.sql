@@ -1,16 +1,19 @@
+DROP TABLE IF EXISTS "image" CASCADE;
 DROP TABLE IF EXISTS "credentials" CASCADE;
 DROP TABLE IF EXISTS "user" CASCADE;
-DROP TABLE IF EXISTS "measurement" CASCADE;
-DROP TABLE IF EXISTS "user_measurement" CASCADE;
+DROP TABLE IF EXISTS "token" CASCADE;
+DROP TABLE IF EXISTS "settings" CASCADE;
+DROP TABLE IF EXISTS "dimension" CASCADE;
+DROP TABLE IF EXISTS "user_dimension" CASCADE;
 DROP TABLE IF EXISTS "workout" CASCADE;
 DROP TABLE IF EXISTS "exercise" CASCADE;
 DROP TABLE IF EXISTS "record" CASCADE;
 
-CREATE TABLE "credentials"
+CREATE TABLE "image"
 (
-    "user_id"  bigint PRIMARY KEY,
-    "login"    varchar,
-    "password" varchar
+    "id"   bigserial PRIMARY KEY,
+    "link" varchar,
+    "name" varchar
 );
 
 CREATE TABLE "user"
@@ -19,21 +22,47 @@ CREATE TABLE "user"
     "name"     varchar,
     "surname"  varchar,
     "birthday" varchar,
-    "gender"   varchar
+    "gender"   varchar,
+    "image_id" bigint
 );
 
-CREATE TABLE "measurement"
+CREATE TABLE "credentials"
+(
+    "user_id"  bigint PRIMARY KEY,
+    "login"    varchar,
+    "password" varchar
+);
+
+CREATE TABLE "token"
+(
+    "id"                 bigserial PRIMARY KEY,
+    "access"             varchar,
+    "refresh"            varchar,
+    "user_id"            bigint,
+    "access_expired_at"  timestamp,
+    "refresh_expired_at" timestamp
+);
+
+CREATE TABLE "settings"
+(
+    "user_id"  bigserial PRIMARY KEY,
+    "language" varchar,
+    "units"    varchar
+);
+
+CREATE TABLE "dimension"
 (
     "id"   bigserial PRIMARY KEY,
     "name" varchar
 );
 
-CREATE TABLE "user_measurement"
+CREATE TABLE "user_dimension"
 (
-    "user_id"        bigint,
-    "measurement_id" bigint,
-    "value"          bigint,
-    PRIMARY KEY ("user_id", "measurement_id")
+    "id"           bigserial PRIMARY KEY,
+    "user_id"      bigint,
+    "dimension_id" bigint,
+    "value"        bigint,
+    "date"         timestamp
 );
 
 CREATE TABLE "workout"
@@ -46,29 +75,36 @@ CREATE TABLE "workout"
 CREATE TABLE "exercise"
 (
     "id"          bigserial PRIMARY KEY,
+    "image_id"    bigint,
     "name"        varchar,
     "description" varchar
 );
 
 CREATE TABLE "record"
 (
-    "workout_id"  bigint,
-    "exercise_id" bigint,
-    "weight"      integer,
-    "count"       integer,
-    PRIMARY KEY ("workout_id", "exercise_id")
+    "id"           bigserial PRIMARY KEY,
+    "workout_id"   bigint,
+    "exercise_id"  bigint,
+    "value"        integer,
+    "measure_type" varchar
 );
 
 ALTER TABLE "credentials"
     ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "user_measurement"
+ALTER TABLE "token"
     ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+
+ALTER TABLE "settings"
+    ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+
+ALTER TABLE "user_dimension"
+    ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+
+ALTER TABLE "user_dimension"
+    ADD FOREIGN KEY ("dimension_id") REFERENCES "dimension" ("id");
 
 ALTER TABLE "workout"
-    ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
-ALTER TABLE "credentials"
     ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "record"

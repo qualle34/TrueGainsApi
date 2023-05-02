@@ -3,9 +3,7 @@ package com.qualle.shapeup.web;
 import com.qualle.shapeup.api.UserDto;
 import com.qualle.shapeup.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,5 +14,25 @@ public class UserController {
     @GetMapping("/user/{id}")
     public UserDto getUser(@PathVariable Long id){
         return userService.getUser(id);
+    }
+
+    @GetMapping("/profile")
+    public UserDto getUserProfile(){
+        return userService.getUser(1L); // todo from token
+    }
+
+    @PutMapping("/user")
+    public void updateUser(@RequestBody UserDto dto){
+
+    }
+
+    @PutMapping("/user/email")
+    public void updateEmail(@RequestBody UserDto dto){
+
+    }
+
+    @PutMapping("/user/password")
+    public void updatePassword(@RequestBody UserDto dto){
+
     }
 }

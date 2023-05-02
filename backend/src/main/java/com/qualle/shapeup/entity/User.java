@@ -3,6 +3,8 @@ package com.qualle.shapeup.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -23,4 +25,20 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Credentials credentials;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Settings settings;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Image image;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Token> tokens;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Workout> workouts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserDimension> dimensions;
 }
