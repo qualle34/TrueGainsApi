@@ -2,18 +2,15 @@ package com.qualle.shapeup.api;
 
 import lombok.*;
 
-import java.util.Map;
-
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChartDto {
+public class ExerciseDto {
 
+    private long id;
     private String name;
     private String description;
-    private String measureType;
-    private String imageLink;
-    private Map<String, Integer> data;
+    private String imageId;
 }

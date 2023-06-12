@@ -1,7 +1,7 @@
 spring:
   datasource:
     password: 43q21
-    username: postgres
+    username: qualle
     url: jdbc:postgresql://localhost:5432/shapeup
   sql:
     init:

@@ -11,22 +11,17 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "exercise", schema = "public")
-public class Exercise {
+@Table(name = "category", schema = "public")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String name;
-    private String description;
 
     @ManyToOne
     private Image image;
 
-    @ManyToOne
-    private Category category;
-
-    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Record> records;
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Exercise> exercises;
 }

@@ -18,4 +18,8 @@ public class AuthenticationController {
     public TokenDto authenticate(@RequestBody AuthenticationDto dto){
         return authenticationService.authenticate(dto);
     }
+
+    @GetMapping("/logout")
+    public void logout(){
+    }
 }

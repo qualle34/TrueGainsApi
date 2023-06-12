@@ -24,4 +24,7 @@ public class Image {
 
     @OneToMany(mappedBy = "image", fetch = FetchType.LAZY)
     private List<Exercise> exercises;
+
+    @OneToMany(mappedBy = "image", fetch = FetchType.LAZY)
+    private List<Category> categories;
 }

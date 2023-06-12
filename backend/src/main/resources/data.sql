@@ -11,6 +11,18 @@ INSERT INTO "credentials"(user_id, login, password) values(2, 'lera', '$2a$10$w9
 INSERT INTO "settings"(user_id, language, units) values(1, 'en', 'metric');
 INSERT INTO "settings"(user_id, language, units) values(2, 'ru', 'metric');
 
+INSERT INTO "category"(name) values('Chest');
+INSERT INTO "category"(name) values('Back');
+INSERT INTO "category"(name) values('Biceps');
+INSERT INTO "category"(name) values('Triceps');
+INSERT INTO "category"(name) values('Forearms');
+INSERT INTO "category"(name) values('Shoulders');
+INSERT INTO "category"(name) values('Quadriceps');
+INSERT INTO "category"(name) values('Hamstrings');
+INSERT INTO "category"(name) values('Glutes');
+INSERT INTO "category"(name) values('Abs');
+INSERT INTO "category"(name) values('Calves');
+
 INSERT INTO "dimension"(name) values('Руки');
 INSERT INTO "dimension"(name) values('Предплечья');
 INSERT INTO "dimension"(name) values('Шея');
@@ -19,9 +31,9 @@ INSERT INTO "dimension"(name) values('Талия');
 INSERT INTO "dimension"(name) values('Бедра');
 INSERT INTO "dimension"(name) values('Икры');
 
-INSERT INTO "exercise"(name, description) values('Жим лежа', 'Жим лёжа — базовое физическое упражнение со свободным весом. Выполняющий упражнение ложится на скамейку, опускает гриф до касания с грудью и поднимает до полного выпрямления в локтевом суставе.');
-INSERT INTO "exercise"(name, description) values('Становая тяга', 'Становая тяга — базовое упражнение, выполняемое обычно со штангой, а также с гантелью или гирей, удерживаемыми обеими руками и поднимаемая на уровень опущенных вытянутых рук.');
-INSERT INTO "exercise"(name, description) values('Присяд', 'Приседания — одно из базовых силовых упражнений. Выполняющий упражнение приседает и затем встаёт, возвращаясь в положение стоя.');
+INSERT INTO "exercise"(category_id, name, description) values(1, 'Жим лежа', 'Жим лёжа — базовое физическое упражнение со свободным весом. Выполняющий упражнение ложится на скамейку, опускает гриф до касания с грудью и поднимает до полного выпрямления в локтевом суставе.');
+INSERT INTO "exercise"(category_id, name, description) values(2, 'Становая тяга', 'Становая тяга — базовое упражнение, выполняемое обычно со штангой, а также с гантелью или гирей, удерживаемыми обеими руками и поднимаемая на уровень опущенных вытянутых рук.');
+INSERT INTO "exercise"(category_id, name, description) values(7, 'Присяд', 'Приседания — одно из базовых силовых упражнений. Выполняющий упражнение приседает и затем встаёт, возвращаясь в положение стоя.');
 
 INSERT INTO "user_dimension"(user_id, dimension_id, value, date) values(1, 1, 40, '2023-04-22 19:10:25-07');
 INSERT INTO "user_dimension"(user_id, dimension_id, value, date) values(1, 2, 28, '2023-04-22 19:10:25-07');

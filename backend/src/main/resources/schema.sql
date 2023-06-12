@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS "user_dimension" CASCADE;
 DROP TABLE IF EXISTS "workout" CASCADE;
 DROP TABLE IF EXISTS "exercise" CASCADE;
 DROP TABLE IF EXISTS "record" CASCADE;
+DROP TABLE IF EXISTS "category" CASCADE;
 
 CREATE TABLE "image"
 (
@@ -72,10 +73,18 @@ CREATE TABLE "workout"
     "date"    timestamp
 );
 
+CREATE TABLE "category"
+(
+    "id"          bigserial PRIMARY KEY,
+    "image_id"    bigint,
+    "name"        varchar
+);
+
 CREATE TABLE "exercise"
 (
     "id"          bigserial PRIMARY KEY,
     "image_id"    bigint,
+    "category_id" bigint,
     "name"        varchar,
     "description" varchar
 );
@@ -112,3 +121,6 @@ ALTER TABLE "record"
 
 ALTER TABLE "record"
     ADD FOREIGN KEY ("exercise_id") REFERENCES "exercise" ("id");
+
+ALTER TABLE "exercise"
+    ADD FOREIGN KEY ("category_id") REFERENCES "category" ("id");
