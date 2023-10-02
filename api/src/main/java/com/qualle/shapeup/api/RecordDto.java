@@ -1,5 +1,6 @@
 package com.qualle.shapeup.api;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -11,11 +12,9 @@ public class RecordDto {
 
     private long id;
 
-    private int value;
+    private long exerciseId;
 
-    private Unit unit;
+    private float weight;
 
-    private ExerciseDto exercise;
-
-    private WorkoutDto workout;
+    private int reps;
 }

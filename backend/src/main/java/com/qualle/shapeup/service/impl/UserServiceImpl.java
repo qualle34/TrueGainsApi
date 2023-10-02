@@ -2,7 +2,7 @@ package com.qualle.shapeup.service.impl;
 
 import com.qualle.shapeup.api.RegistrationDto;
 import com.qualle.shapeup.api.UserDto;
-import com.qualle.shapeup.entity.User;
+import com.qualle.shapeup.model.entity.User;
 import com.qualle.shapeup.repository.UserRepository;
 import com.qualle.shapeup.service.UserService;
 import com.qualle.shapeup.service.mapper.UserMapper;

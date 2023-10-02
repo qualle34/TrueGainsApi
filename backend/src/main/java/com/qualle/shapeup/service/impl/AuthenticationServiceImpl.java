@@ -2,7 +2,7 @@ package com.qualle.shapeup.service.impl;
 
 import com.qualle.shapeup.api.AuthenticationDto;
 import com.qualle.shapeup.api.TokenDto;
-import com.qualle.shapeup.entity.User;
+import com.qualle.shapeup.model.entity.User;
 import com.qualle.shapeup.repository.UserRepository;
 import com.qualle.shapeup.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;

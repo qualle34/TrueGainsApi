@@ -1,4 +1,4 @@
-package com.qualle.shapeup.entity;
+package com.qualle.shapeup.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,8 +15,8 @@ public class Record {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private int value;
-    private String measureType;
+    private float weight;
+    private int reps;
 
     @ManyToOne
     private Workout workout;

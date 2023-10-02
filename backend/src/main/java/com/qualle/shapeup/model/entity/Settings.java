@@ -1,4 +1,4 @@
-package com.qualle.shapeup.entity;
+package com.qualle.shapeup.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,15 +9,16 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "credentials", schema = "public")
-public class Credentials {
+@Table(name = "settings", schema = "public")
+public class Settings {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private long userId;
-    private String login;
-    private String password;
+
+    private String language;
+    private String units;
 
     @MapsId
     @OneToOne

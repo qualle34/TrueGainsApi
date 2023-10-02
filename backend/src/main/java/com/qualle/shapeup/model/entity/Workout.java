@@ -1,9 +1,9 @@
-package com.qualle.shapeup.entity;
+package com.qualle.shapeup.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,11 +19,12 @@ public class Workout {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private OffsetDateTime date;
+    private LocalDateTime date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(mappedBy = "workout", fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Record> records;
 }

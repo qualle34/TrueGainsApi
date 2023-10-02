@@ -75,9 +75,9 @@ CREATE TABLE "workout"
 
 CREATE TABLE "category"
 (
-    "id"          bigserial PRIMARY KEY,
-    "image_id"    bigint,
-    "name"        varchar
+    "id"       bigserial PRIMARY KEY,
+    "image_id" bigint,
+    "name"     varchar
 );
 
 CREATE TABLE "exercise"
@@ -91,11 +91,11 @@ CREATE TABLE "exercise"
 
 CREATE TABLE "record"
 (
-    "id"           bigserial PRIMARY KEY,
-    "workout_id"   bigint,
-    "exercise_id"  bigint,
-    "value"        integer,
-    "measure_type" varchar
+    "id"          bigserial PRIMARY KEY,
+    "workout_id"  bigint,
+    "exercise_id" bigint,
+    "weight"      real,
+    "reps"        integer
 );
 
 ALTER TABLE "credentials"

@@ -1,8 +1,8 @@
 package com.qualle.shapeup.service.impl;
 
 import com.qualle.shapeup.api.ChartDto;
-import com.qualle.shapeup.entity.Exercise;
-import com.qualle.shapeup.entity.Record;
+import com.qualle.shapeup.model.entity.Exercise;
+import com.qualle.shapeup.model.entity.Record;
 import com.qualle.shapeup.repository.RecordRepository;
 import com.qualle.shapeup.service.ChartService;
 import lombok.RequiredArgsConstructor;
@@ -37,16 +37,16 @@ public class ChartServiceImpl implements ChartService {
         Record firstRecord = records.get(0);
         Exercise exercise = firstRecord.getExercise();
 
-        Map<String, Integer> data = new HashMap<>();
+        Map<String, Float> data = new HashMap<>();
 
         for (Record record : records) {
-            data.put(record.getWorkout().getDate().toString(), record.getValue());
+            data.put(record.getWorkout().getDate().toString(), record.getWeight());
         }
 
         return ChartDto.builder()
                 .name(exercise.getName())
                 .description(exercise.getDescription())
-                .measureType(firstRecord.getMeasureType()) // todo что если разный тип
+                .measureType("firstRecord.getMeasureType()") // todo delete
                 .imageLink("/") // todo
                 .data(data)
                 .build();

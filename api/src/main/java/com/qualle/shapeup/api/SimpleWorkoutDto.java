@@ -1,6 +1,5 @@
 package com.qualle.shapeup.api;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
@@ -10,11 +9,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkoutDto {
+public class SimpleWorkoutDto {
 
     private long id;
-    @NotBlank
     private String date;
     private long userId;
-    private List<RecordDto> records;
+    private int exerciseCount;
 }

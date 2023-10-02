@@ -51,16 +51,16 @@ INSERT INTO "user_dimension"(user_id, dimension_id, value, date) values(1, 5, 80
 INSERT INTO "user_dimension"(user_id, dimension_id, value, date) values(1, 6, 67, '2023-05-01 19:10:25-07');
 INSERT INTO "user_dimension"(user_id, dimension_id, value, date) values(1, 7, 43, '2023-05-01 19:10:25-07');
 
-INSERT INTO "workout"(user_id, date) values(1, '2023-04-22 19:10:25-07');
-INSERT INTO "workout"(user_id, date) values(1, '2023-04-28 19:10:25-07');
-INSERT INTO "workout"(user_id, date) values(1, '2023-05-01 19:10:25-07');
+INSERT INTO "workout"(user_id, date) values(1, '2023-09-22 02:10:25.000000');
+INSERT INTO "workout"(user_id, date) values(1, '2023-09-23 02:10:25.000000');
+INSERT INTO "workout"(user_id, date) values(1, '2023-09-24 02:10:25.000000');
 
-INSERT INTO "record"(workout_id, exercise_id, value, measure_type) values(1, 1, 60, 'weight');
-INSERT INTO "record"(workout_id, exercise_id, value, measure_type) values(1, 2, 80, 'weight');
-INSERT INTO "record"(workout_id, exercise_id, value, measure_type) values(1, 3, 70, 'weight');
-INSERT INTO "record"(workout_id, exercise_id, value, measure_type) values(2, 1, 70, 'weight');
-INSERT INTO "record"(workout_id, exercise_id, value, measure_type) values(2, 2, 90, 'weight');
-INSERT INTO "record"(workout_id, exercise_id, value, measure_type) values(2, 3, 80, 'weight');
-INSERT INTO "record"(workout_id, exercise_id, value, measure_type) values(3, 1, 80, 'weight');
-INSERT INTO "record"(workout_id, exercise_id, value, measure_type) values(3, 2, 100, 'weight');
-INSERT INTO "record"(workout_id, exercise_id, value, measure_type) values(3, 3, 90, 'weight');
+INSERT INTO "record"(workout_id, exercise_id, weight, reps) values(1, 1, 60, 14);
+INSERT INTO "record"(workout_id, exercise_id, weight, reps) values(1, 2, 80, 12);
+INSERT INTO "record"(workout_id, exercise_id, weight, reps) values(1, 3, 70, 10);
+INSERT INTO "record"(workout_id, exercise_id, weight, reps) values(2, 1, 70, 14);
+INSERT INTO "record"(workout_id, exercise_id, weight, reps) values(2, 2, 90, 13);
+INSERT INTO "record"(workout_id, exercise_id, weight, reps) values(2, 3, 80, 12);
+INSERT INTO "record"(workout_id, exercise_id, weight, reps) values(3, 1, 80, 10);
+INSERT INTO "record"(workout_id, exercise_id, weight, reps) values(3, 2, 100, 9);
+INSERT INTO "record"(workout_id, exercise_id, weight, reps) values(3, 3, 90, 6);

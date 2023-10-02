@@ -1,4 +1,4 @@
-package com.qualle.shapeup.entity;
+package com.qualle.shapeup.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

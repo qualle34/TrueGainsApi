@@ -15,5 +15,5 @@ public class ChartDto {
     private String description;
     private String measureType;
     private String imageLink;
-    private Map<String, Integer> data;
+    private Map<String, Float> data;
 }
