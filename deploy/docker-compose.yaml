@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+
+  truegain-api:
+    image: truegain-api
+    networks:
+      - truegain-net
+    ports:
+      - "8080:8080"
+
+  truegain-db:
+    image: postgres
+    networks:
+      - truegain-net
+    environment:
+      POSTGRES_DB: "shapeup"
+      POSTGRES_USER: "qualle"
+      POSTGRES_PASSWORD: "43q21"
+    ports:
+      - "5432:5432"
+
+networks:
+  truegain-net:

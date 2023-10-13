@@ -1,0 +1,14 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: true-gain-api
+  datasource:
+    password:  ${TRUEGAIN_DB_PASSWORD:43q21}
+    username:  ${TRUEGAIN_DB_USERNAME:qualle}
+    url:  ${TRUEGAIN_DB_URL:jdbc:postgresql://172.19.0.2:5432/shapeup}
+  sql:
+    init:
+      mode: always
+  jpa:
+    show-sql: true
