@@ -5,6 +5,7 @@ import com.qualle.shapeup.api.UserDto;
 import com.qualle.shapeup.model.entity.User;
 import com.qualle.shapeup.repository.UserRepository;
 import com.qualle.shapeup.service.UserService;
+import com.qualle.shapeup.service.mapper.RegistrationUserMapper;
 import com.qualle.shapeup.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final UserMapper mapper;
+    private final RegistrationUserMapper registrationMapper;
 
     @Override
     public UserDto getUser(Long id) {
@@ -26,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(RegistrationDto dto) {
-        User user = mapper.fromDto(dto);
+        User user = registrationMapper.fromDto(dto);
 
         repository.save(user);
     }
