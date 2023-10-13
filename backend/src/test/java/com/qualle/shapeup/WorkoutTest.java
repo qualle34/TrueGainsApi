@@ -8,10 +8,8 @@ import com.qualle.shapeup.model.entity.Workout;
 import com.qualle.shapeup.repository.WorkoutRepository;
 import com.qualle.shapeup.service.WorkoutService;
 import com.qualle.shapeup.service.util.DateFormatUtil;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -31,12 +28,10 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
@@ -58,7 +53,7 @@ public class WorkoutTest {
     @MockBean
     private WorkoutRepository workoutRepository;
 
-    @Before
+    @BeforeAll
     public void before() {
 
         LocalDateTime date1 = DateFormatUtil.toDate("2023-09-23T10:03:44.9503845");
@@ -106,7 +101,6 @@ public class WorkoutTest {
         given(workoutRepository.save(any(Workout.class))).willReturn(workout);
     }
 
-    @Test
     public void getWorkoutByIdWhenCorrectDataThenSuccess() throws Exception {
 
         mvc.perform(get("/workout/1")
@@ -117,7 +111,6 @@ public class WorkoutTest {
                 .andExpect(jsonPath("$.id", is(1)));
     }
 
-    @Test
     public void getWorkoutByIdWhenIdWasNullThenFail() throws Exception {
 
         mvc.perform(get("/workout")
@@ -128,7 +121,6 @@ public class WorkoutTest {
                 .andExpect(jsonPath("$.type", is("BAD_REQUEST")));
     }
 
-    @Test
     public void getWorkoutByUserIdWhenWhenCorrectDataThenSuccess() throws Exception {
 
         mvc.perform(get("/workout/simple?userId=1")
@@ -139,7 +131,6 @@ public class WorkoutTest {
                 .andExpect(jsonPath("$.[0].id", is(1)));
     }
 
-    @Test
     public void getWorkoutByUserIdWhenIdWasNullThenFail() throws Exception {
 
         mvc.perform(get("/workout/simple")
@@ -150,7 +141,6 @@ public class WorkoutTest {
                 .andExpect(jsonPath("$.type", is("BAD_REQUEST")));
     }
 
-    @Test
     public void getWorkoutByUserIdAndDateWhenCorrectDataThenSuccess() throws Exception {
 
         mvc.perform(get("/workout?userId=1&date=2023-09-23T10:03:44.9503845")
@@ -161,7 +151,6 @@ public class WorkoutTest {
                 .andExpect(jsonPath("$.id", is(1)));
     }
 
-    @Test
     public void getWorkoutByUserIdAndDateWhenWorkoutIsNullThenFail() throws Exception {
 
         mvc.perform(get("/workout/2")
@@ -172,7 +161,6 @@ public class WorkoutTest {
                 .andExpect(jsonPath("$.type", is("NOT_FOUND")));
     }
 
-    @Test
     public void getWorkoutByUserIdAndDateWhenUserIsNullThenFail() throws Exception {
 
         mvc.perform(get("/workout?date=2023-09-23T10:03:44.9503845")
@@ -183,7 +171,6 @@ public class WorkoutTest {
                 .andExpect(jsonPath("$.type", is("BAD_REQUEST")));
     }
 
-    @Test
     public void getWorkoutByUserIdAndDateWhenDateWasNullThenFail() throws Exception {
 
         mvc.perform(get("/workout?userId=2")
@@ -194,8 +181,6 @@ public class WorkoutTest {
                 .andExpect(jsonPath("$.type", is("BAD_REQUEST")));
     }
 
-
-    @Test
     public void saveWorkoutWhenCorrectDataThenSuccess() throws Exception {
 
         LocalDateTime date1 = DateFormatUtil.toDate("2023-09-23T10:03:44.9503845");
@@ -231,14 +216,12 @@ public class WorkoutTest {
                 .build();
 
 
-
         mvc.perform(post("/workout")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(workout)))
                 .andExpect(status().isOk());
     }
 
-    @Test
     public void saveWorkoutWhenDataWasNullThenFail() throws Exception {
 
         mvc.perform(post("/workout")
