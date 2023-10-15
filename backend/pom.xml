@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.api.truegain</groupId>
-        <artifactId>truegain</artifactId>
+        <groupId>com.truegain</groupId>
+        <artifactId>truegain-api</artifactId>
         <version>${revision}</version>
     </parent>
 
@@ -12,7 +12,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.api.truegain</groupId>
+            <groupId>com.truegain</groupId>
             <artifactId>api</artifactId>
         </dependency>
 
@@ -68,6 +68,7 @@
     </dependencies>
 
     <build>
+        <finalName>truegain-api-v${revision}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -88,6 +89,29 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.12</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dockerfile>Dockerfile</dockerfile>
+                    <username>qualle34</username>
+                    <password>${env.DOCKER_TOKEN}</password>
+                    <repository>qualle34/truegain-api</repository>
+                    <tag>v${revision}</tag>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 </project>
