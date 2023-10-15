@@ -15,9 +15,7 @@ public class SimpleWorkoutMapperImpl implements SimpleWorkoutMapper {
     @Override
     public SimpleWorkoutDto toDto(Workout workout) {
 
-        if (workout == null) {
-            throw new RuntimeException("Unable to parse entity. Entity is null");
-        }
+        validate(workout);
 
         long userId = 0;
 
@@ -39,9 +37,7 @@ public class SimpleWorkoutMapperImpl implements SimpleWorkoutMapper {
     @Override
     public Workout fromDto(SimpleWorkoutDto dto) {
 
-        if (dto == null) {
-            throw new RuntimeException("Unable to parse entity. Entity is null");
-        }
+        validate(dto);
 
         User user = User.builder().id(dto.getUserId()).build();
 

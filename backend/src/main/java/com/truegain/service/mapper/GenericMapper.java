@@ -11,6 +11,7 @@ public interface GenericMapper<T, DTO> {
     T fromDto(DTO dto);
 
     default List<DTO> toDto(Collection<T> list) {
+        validate(list);
         List<DTO> dtos = new ArrayList<>();
 
         list.forEach(t -> dtos.add(toDto(t)));
@@ -19,10 +20,17 @@ public interface GenericMapper<T, DTO> {
     }
 
     default List<DTO> toDto(Iterable<T> iterable) {
+        validate(iterable);
         List<DTO> dtos = new ArrayList<>();
 
         iterable.forEach(t -> dtos.add(toDto(t)));
 
         return dtos;
+    }
+
+    default void validate(Object o) {
+        if (o == null) {
+            throw new RuntimeException("Unable to parse entity. Entity is null");
+        }
     }
 }

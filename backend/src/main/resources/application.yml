@@ -2,11 +2,11 @@ server:
   port: 8080
 spring:
   application:
-    name: true-gain-api
+    name: truegain-api
   datasource:
     password:  ${TRUEGAIN_DB_PASSWORD:43q21}
     username:  ${TRUEGAIN_DB_USERNAME:qualle}
-    url:  ${TRUEGAIN_DB_URL:jdbc:postgresql://172.19.0.2:5432/shapeup}
+    url:  ${TRUEGAIN_DB_URL:jdbc:postgresql://localhost:5432/shapeup}
     hikari:
       max-lifetime: 1000
       connection-timeout: 5000

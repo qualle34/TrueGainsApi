@@ -7,13 +7,26 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryMapperImpl implements CategoryMapper {
+
     @Override
     public CategoryDto toDto(Category category) {
-        return null;
+
+        validate(category);
+
+        return CategoryDto.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build();
     }
 
     @Override
-    public Category fromDto(CategoryDto categoryDto) {
-        return null;
+    public Category fromDto(CategoryDto dto) {
+
+        validate(dto);
+
+        return Category.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .build();
     }
 }

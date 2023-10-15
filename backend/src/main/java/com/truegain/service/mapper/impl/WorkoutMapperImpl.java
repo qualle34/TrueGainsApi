@@ -24,9 +24,7 @@ public class WorkoutMapperImpl implements WorkoutMapper {
     @Override
     public WorkoutDto toDto(Workout workout) {
 
-        if (workout == null) {
-            throw new RuntimeException("Unable to parse entity. Entity is null");
-        }
+        validate(workout);
 
         long userId = 0;
 
@@ -40,24 +38,18 @@ public class WorkoutMapperImpl implements WorkoutMapper {
             workout.getRecords().forEach(t -> recordDto.add(recordMapper.toDto(t)));
         }
 
-
-        WorkoutDto dto = WorkoutDto.builder()
+        return WorkoutDto.builder()
                 .id(workout.getId())
                 .userId(userId)
                 .date(DateFormatUtil.toString(workout.getDate()))
                 .records(recordDto)
                 .build();
-
-
-        return dto;
     }
 
     @Override
     public Workout fromDto(WorkoutDto dto) {
 
-        if (dto == null) {
-            throw new RuntimeException("Unable to parse entity. Entity is null");
-        }
+        validate(dto);
 
         User user = User.builder().id(dto.getUserId()).build();
 

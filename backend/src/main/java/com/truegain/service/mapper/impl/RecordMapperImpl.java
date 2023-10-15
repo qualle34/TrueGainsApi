@@ -12,9 +12,7 @@ public class RecordMapperImpl implements RecordMapper {
     @Override
     public RecordDto toDto(Record record) {
 
-        if (record == null) {
-            throw new RuntimeException("Unable to parse entity. Entity is null");
-        }
+        validate(record);
 
         long exerciseId = 0;
 
@@ -33,9 +31,7 @@ public class RecordMapperImpl implements RecordMapper {
     @Override
     public Record fromDto(RecordDto dto) {
 
-        if (dto == null) {
-            throw new RuntimeException("Unable to parse entity. Entity is null");
-        }
+        validate(dto);
 
         Exercise exercise = Exercise.builder()
                 .id(dto.getExerciseId())
