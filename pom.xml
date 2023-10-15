@@ -16,7 +16,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.truegain</groupId>
+    <groupId>com.qualle.truegain</groupId>
     <artifactId>truegain-api</artifactId>
     <version>${revision}</version>
 
@@ -31,12 +31,12 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.truegain</groupId>
+                <groupId>com.qualle.truegain</groupId>
                 <artifactId>api</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>com.truegain</groupId>
+                <groupId>com.qualle.truegain</groupId>
                 <artifactId>backend</artifactId>
                 <version>${revision}</version>
             </dependency>

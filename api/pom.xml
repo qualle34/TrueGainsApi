@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.truegain</groupId>
+        <groupId>com.qualle.truegain</groupId>
         <artifactId>truegain-api</artifactId>
         <version>${revision}</version>
     </parent>
