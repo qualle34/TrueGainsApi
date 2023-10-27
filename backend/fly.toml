@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for truegain-api on 2023-10-15T18:04:17+03:00
+# fly.toml app configuration file generated for truegain-api on 2023-10-27T16:25:56+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -7,7 +7,7 @@ app = "truegain-api"
 primary_region = "arn"
 
 [build]
-  image = "qualle34/truegain-api:v0.1.4"
+  image = "qualle34/truegain-api:v0.1.7"
 
 [http_service]
   internal_port = 8080
