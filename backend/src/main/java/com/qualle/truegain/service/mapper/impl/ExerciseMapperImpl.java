@@ -22,9 +22,10 @@ public class ExerciseMapperImpl implements ExerciseMapper {
         return ExerciseDto.builder()
                 .id(exercise.getId())
                 .name(exercise.getName())
+                .equipment(exercise.getEquipment())
 //                .imageId(exercise.getImage().getLink())
                 .description(exercise.getDescription())
-                .records(recordMapper.toDto(exercise.getRecords()))
+//                .records(recordMapper.toDto(exercise.getRecords()))
                 .build();
     }
 

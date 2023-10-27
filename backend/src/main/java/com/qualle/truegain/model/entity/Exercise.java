@@ -19,6 +19,7 @@ public class Exercise {
     private long id;
 
     private String name;
+    private String equipment;
     private String description;
 
     @ManyToOne

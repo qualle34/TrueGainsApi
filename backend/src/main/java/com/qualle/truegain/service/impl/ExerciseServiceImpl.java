@@ -11,7 +11,6 @@ import com.qualle.truegain.service.mapper.ExerciseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,17 +24,14 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public List<CategoryDto> getCategories() {
-        List<CategoryDto> result = new ArrayList<>();
-
-        categoryRepository.findAll()
-                .forEach(c -> result.add(categoryMapper.toDto(c)));
-
-        return result;
+        return categoryMapper.toDto(categoryRepository.findAllWithImage());
     }
 
     @Override
     public List<ExerciseDto> getExercisesByCategory(long categoryId) {
-        return null;
+        List<Exercise> exercises = exerciseRepository.findAllExercisesByCategoryId(categoryId);
+
+        return exerciseMapper.toDto(exercises);
     }
 
     @Override

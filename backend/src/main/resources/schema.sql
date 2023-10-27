@@ -86,7 +86,9 @@ CREATE TABLE "exercise"
     "image_id"    bigint,
     "category_id" bigint,
     "name"        varchar,
-    "description" varchar
+    "equipment"   varchar,
+    "description" varchar,
+    "technique" varchar
 );
 
 CREATE TABLE "record"

@@ -16,6 +16,7 @@ public class CategoryMapperImpl implements CategoryMapper {
         return CategoryDto.builder()
                 .id(category.getId())
                 .name(category.getName())
+                .imageLink(category.getImage().getLink())
                 .build();
     }
 

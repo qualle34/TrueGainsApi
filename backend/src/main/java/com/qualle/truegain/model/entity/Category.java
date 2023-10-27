@@ -22,6 +22,6 @@ public class Category {
     @ManyToOne
     private Image image;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Exercise> exercises;
 }
