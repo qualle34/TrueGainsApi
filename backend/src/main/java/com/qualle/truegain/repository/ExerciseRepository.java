@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ExerciseRepository extends CrudRepository<Exercise, Long> {
 
-    @Query("SELECT u FROM User u JOIN FETCH u.credentials c WHERE c.login LIKE :login")
-    User findUserWithCredentials(String login);
-
-
+    @Query("SELECT e FROM Exercise e JOIN FETCH e.records r JOIN FETCH r.workout w WHERE w.id = :id")
+    List<Exercise> findAllExercisesWithRecordsByWorkoutId(long id);
 
 }

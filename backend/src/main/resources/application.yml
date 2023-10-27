@@ -20,3 +20,8 @@ spring:
     show-sql: true
 
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: httptrace,health,info,beans

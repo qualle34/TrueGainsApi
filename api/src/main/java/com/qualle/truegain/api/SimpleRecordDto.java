@@ -1,6 +1,5 @@
 package com.qualle.truegain.api;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -8,10 +7,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecordDto {
+public class SimpleRecordDto {
 
     private long id;
-    private long exerciseId;
+
     private float weight;
+
     private int reps;
 }
