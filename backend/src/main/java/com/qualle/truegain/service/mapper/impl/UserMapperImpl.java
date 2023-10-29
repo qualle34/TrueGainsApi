@@ -5,11 +5,13 @@ import com.qualle.truegain.service.mapper.UserMapper;
 import com.qualle.truegain.model.entity.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserMapperImpl implements UserMapper {
 
     @Override
-    public UserDto toDto(User user) {
+    public UserDto toDto(User user, List<String> params) {
 
         validate(user);
 
@@ -21,7 +23,7 @@ public class UserMapperImpl implements UserMapper {
     }
 
     @Override
-    public User fromDto(UserDto dto) {
+    public User fromDto(UserDto dto, List<String> params) {
 
         validate(dto);
 

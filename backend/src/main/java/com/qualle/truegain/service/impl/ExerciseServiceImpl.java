@@ -3,6 +3,7 @@ package com.qualle.truegain.service.impl;
 import com.qualle.truegain.api.CategoryDto;
 import com.qualle.truegain.api.ExerciseDto;
 import com.qualle.truegain.model.entity.Exercise;
+import com.qualle.truegain.model.exception.EntityNotFoundException;
 import com.qualle.truegain.repository.CategoryRepository;
 import com.qualle.truegain.repository.ExerciseRepository;
 import com.qualle.truegain.service.ExerciseService;
@@ -24,7 +25,12 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public List<CategoryDto> getCategories() {
-        return categoryMapper.toDto(categoryRepository.findAllWithImage());
+        return categoryMapper.toDto(categoryRepository.findAllWithImage(), List.of("image"));
+    }
+
+    @Override
+    public List<CategoryDto> getCategoriesWithExercises() {
+        return categoryMapper.toDto(categoryRepository.findAllWithExerciseAndImage(), List.of("image", "exercises", "exercises-image"));
     }
 
     @Override
@@ -35,12 +41,26 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public List<ExerciseDto> getExercise(long id) {
-        return null;
+    public ExerciseDto getExercise(long id) {
+        return exerciseMapper.toDto(exerciseRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new));
+    }
+
+    @Override
+    public ExerciseDto getExerciseWithRecordsByIdForUserId(long id, long userId) {
+        Exercise exercise = exerciseRepository.findByIdAndUserIdWithRecords(id, userId);
+
+        if (exercise != null) {
+            return exerciseMapper.toDto(exercise, List.of("image", "records"));
+        }
+
+        return getExercise(id);
     }
 
     @Override
     public List<ExerciseDto> getExerciseWithRecordsByWorkoutId(long workoutId) {
         return exerciseMapper.toDto(exerciseRepository.findAllExercisesWithRecordsByWorkoutId(workoutId));
     }
+
+
 }

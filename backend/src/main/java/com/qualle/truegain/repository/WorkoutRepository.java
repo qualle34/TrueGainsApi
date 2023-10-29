@@ -12,10 +12,13 @@ import java.util.Map;
 @Repository
 public interface WorkoutRepository extends CrudRepository<Workout, Long> {
 
-    @Query("FROM Workout w INNER JOIN FETCH User u WHERE  u.id = :userId AND w.date BETWEEN :dateStart AND :dateEnd ")
+    @Query("FROM Workout w INNER JOIN FETCH w.user u INNER JOIN FETCH w.records r LEFT JOIN FETCH r.exercise e LEFT JOIN FETCH e.image WHERE w.id = :id")
+    Workout findByIdWithRecords(long id);
+
+    @Query("FROM Workout w INNER JOIN FETCH w.user u INNER JOIN FETCH w.records r LEFT JOIN FETCH r.exercise e LEFT JOIN FETCH e.image WHERE u.id = :userId AND w.date BETWEEN :dateStart AND :dateEnd ")
     Workout findByUserIdAndDate(long userId, LocalDateTime dateStart, LocalDateTime dateEnd);
 
-    @Query("FROM Workout w INNER JOIN FETCH User u WHERE u.id = :userId ORDER BY w.date DESC")
+    @Query("FROM Workout w INNER JOIN FETCH w.user u WHERE u.id = :userId ORDER BY w.date DESC")
     List<Workout> findAllByUserId(long userId);
 
     @Query(nativeQuery = true, value = "SELECT DATE_PART('week', workout.date) AS week, COUNT(id) FROM workout WHERE workout.user_id = :userId AND workout.date > workout.date  - interval '1 year' GROUP BY week ORDER BY week;")

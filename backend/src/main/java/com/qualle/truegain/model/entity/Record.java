@@ -18,9 +18,9 @@ public class Record {
     private float weight;
     private int reps;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Workout workout;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Exercise exercise;
 }

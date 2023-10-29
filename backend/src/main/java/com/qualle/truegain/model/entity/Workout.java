@@ -24,7 +24,6 @@ public class Workout {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Record> records;
 }

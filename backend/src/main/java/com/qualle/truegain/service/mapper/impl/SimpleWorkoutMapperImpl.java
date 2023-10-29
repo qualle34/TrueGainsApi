@@ -7,13 +7,14 @@ import com.qualle.truegain.model.entity.Workout;
 import com.qualle.truegain.service.util.DateFormatUtil;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class SimpleWorkoutMapperImpl implements SimpleWorkoutMapper {
 
     @Override
-    public SimpleWorkoutDto toDto(Workout workout) {
+    public SimpleWorkoutDto toDto(Workout workout, List<String> params) {
 
         validate(workout);
 
@@ -35,7 +36,7 @@ public class SimpleWorkoutMapperImpl implements SimpleWorkoutMapper {
     }
 
     @Override
-    public Workout fromDto(SimpleWorkoutDto dto) {
+    public Workout fromDto(SimpleWorkoutDto dto, List<String> params) {
 
         validate(dto);
 

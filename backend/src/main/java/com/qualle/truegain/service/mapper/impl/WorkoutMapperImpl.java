@@ -1,19 +1,19 @@
 package com.qualle.truegain.service.mapper.impl;
 
-import com.qualle.truegain.api.*;
+import com.qualle.truegain.api.ExerciseDto;
+import com.qualle.truegain.api.WorkoutDto;
 import com.qualle.truegain.model.entity.Exercise;
-import com.qualle.truegain.service.mapper.ExerciseMapper;
-import com.qualle.truegain.service.mapper.RecordMapper;
-import com.qualle.truegain.service.mapper.WorkoutMapper;
 import com.qualle.truegain.model.entity.Record;
 import com.qualle.truegain.model.entity.User;
 import com.qualle.truegain.model.entity.Workout;
+import com.qualle.truegain.service.mapper.ExerciseMapper;
+import com.qualle.truegain.service.mapper.RecordMapper;
+import com.qualle.truegain.service.mapper.WorkoutMapper;
 import com.qualle.truegain.service.util.DateFormatUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,7 +26,7 @@ public class WorkoutMapperImpl implements WorkoutMapper {
     private final ExerciseMapper exerciseMapper;
 
     @Override
-    public WorkoutDto toDto(Workout workout) {
+    public WorkoutDto toDto(Workout workout, List<String> params) {
 
         validate(workout);
 
@@ -36,15 +36,36 @@ public class WorkoutMapperImpl implements WorkoutMapper {
             userId = workout.getUser().getId();
         }
 
-        return WorkoutDto.builder()
+        WorkoutDto dto = WorkoutDto.builder()
                 .id(workout.getId())
                 .userId(userId)
                 .date(DateFormatUtil.toString(workout.getDate()))
                 .build();
+
+        List<ExerciseDto> exerciseDtoList = new ArrayList<>();
+
+
+        if (params.contains("records") && workout.getRecords() != null) {
+
+            Map<Exercise, List<Record>> exercises = workout.getRecords().stream()
+                    .collect(Collectors.groupingBy(Record::getExercise));
+
+            for (Map.Entry<Exercise, List<Record>> entry : exercises.entrySet()) {
+
+                Exercise exercise = entry.getKey();
+                exercise.setRecords(entry.getValue());
+
+                exerciseDtoList.add(exerciseMapper.toDto(exercise, List.of("records", "image")));
+            }
+        }
+
+        dto.setExercises(exerciseDtoList);
+
+        return dto;
     }
 
     @Override
-    public Workout fromDto(WorkoutDto dto) {
+    public Workout fromDto(WorkoutDto dto, List<String> params) {
 
         validate(dto);
 
@@ -58,15 +79,27 @@ public class WorkoutMapperImpl implements WorkoutMapper {
 
         List<Record> records = new ArrayList<>();
 
-//        if (dto.getRecords() != null && !dto.getRecords().isEmpty()) {
-//
-//            dto.getRecords().forEach(t -> {
-//                        Record record = recordMapper.fromDto(t);
-//                        record.setWorkout(workout);
-//                        records.add(record);
-//                    }
-//            );
-//        }
+        if (params.contains("records") && dto.getExercises() != null) {
+
+            for (ExerciseDto exerciseDto : dto.getExercises()) {
+
+                Exercise exercise = Exercise.builder()
+                        .id(exerciseDto.getId())
+                        .records(new ArrayList<>())
+                        .build();
+
+                records.addAll(exerciseDto.getRecords().stream().map(r -> {
+
+                    Record record = recordMapper.fromDto(r);
+                    record.setExercise(exercise);
+                    record.setWorkout(workout);
+                    exercise.getRecords().add(record);
+
+                    return record;
+                }).toList());
+            }
+
+        }
 
         workout.setRecords(records);
 

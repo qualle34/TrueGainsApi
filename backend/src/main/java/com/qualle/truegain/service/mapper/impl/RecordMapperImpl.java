@@ -6,11 +6,13 @@ import com.qualle.truegain.model.entity.Exercise;
 import com.qualle.truegain.model.entity.Record;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class RecordMapperImpl implements RecordMapper {
 
     @Override
-    public RecordDto toDto(Record record) {
+    public RecordDto toDto(Record record, List<String> params) {
 
         validate(record);
 
@@ -29,19 +31,22 @@ public class RecordMapperImpl implements RecordMapper {
     }
 
     @Override
-    public Record fromDto(RecordDto dto) {
+    public Record fromDto(RecordDto dto, List<String> params) {
 
         validate(dto);
 
-        Exercise exercise = Exercise.builder()
-                .id(dto.getExerciseId())
-                .build();
-
-        return Record.builder()
+        Record record = Record.builder()
                 .id(dto.getId())
-                .exercise(exercise)
                 .reps(dto.getReps())
                 .weight(dto.getWeight())
                 .build();
+
+        if (params.contains("exercise")) {
+            record.setExercise(Exercise.builder()
+                    .id(dto.getExerciseId())
+                    .build());
+        }
+
+        return record;
     }
 }

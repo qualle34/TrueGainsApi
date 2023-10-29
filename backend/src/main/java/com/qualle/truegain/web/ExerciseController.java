@@ -18,17 +18,27 @@ public class ExerciseController {
     private final ExerciseService exerciseService;
 
     @GetMapping("/category")
-    public List<CategoryDto> getCategories(){
+    public List<CategoryDto> getCategories(@RequestParam(name = "fetch", required = false) String fetch) {
+
+        if ("exercise".equals(fetch)) {
+            return exerciseService.getCategoriesWithExercises();
+        }
+
         return exerciseService.getCategories();
     }
 
     @GetMapping("/exercise")
-    public List<ExerciseDto> getCategories(@RequestParam(name = "category-id") long categoryId){
+    public List<ExerciseDto> getCategories(@RequestParam(name = "category-id") long categoryId) {
         return exerciseService.getExercisesByCategory(categoryId);
     }
 
     @GetMapping("/exercise/{id}")
-    public List<ExerciseDto> getExercise(@PathVariable(required = false) long id) {
+    public ExerciseDto getExercise(@PathVariable long id, @RequestParam(name = "user-id", required = false, defaultValue = "0") long userId) {
+
+        if (userId != 0) {
+            return exerciseService.getExerciseWithRecordsByIdForUserId(id, userId);
+        }
+
         return exerciseService.getExercise(id);
     }
 }

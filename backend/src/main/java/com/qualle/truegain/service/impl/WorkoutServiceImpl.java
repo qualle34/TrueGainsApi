@@ -4,6 +4,7 @@ import com.qualle.truegain.api.ExerciseDto;
 import com.qualle.truegain.api.SimpleWorkoutDto;
 import com.qualle.truegain.api.WorkoutDto;
 import com.qualle.truegain.api.WorkoutVolumeDto;
+import com.qualle.truegain.model.entity.User;
 import com.qualle.truegain.model.entity.Workout;
 import com.qualle.truegain.model.exception.EntityNotFoundException;
 import com.qualle.truegain.repository.WorkoutCustomRepository;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,24 +53,22 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
 
     public WorkoutDto getById(Long id) {
 
-        Workout workout = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException());
+        Workout workout = repository.findByIdWithRecords(id);
 
-        WorkoutDto dto = getMapper().toDto(workout);
+        WorkoutDto dto = getMapper().toDto(workout, List.of("records"));
 
-        List<ExerciseDto> exercises = exerciseService.getExerciseWithRecordsByWorkoutId(id);
+        List<ExerciseDto> exercises = dto.getExercises();
 
         List<WorkoutVolumeDto> volumeForExercises = exercises.stream().map(e -> WorkoutVolumeDto.builder()
                         .name(e.getName())
                         .value(e.getRecords().stream().mapToDouble(r -> r.getReps() * r.getWeight()).sum()).build())
                 .collect(Collectors.toList());
 
+        List<WorkoutVolumeDto> volumeForBodyParts = new ArrayList<>(volumeForExercises);
+        dto.setVolumeForBodyParts(volumeForBodyParts); // todo
+
         volumeForExercises.add(0, new WorkoutVolumeDto("Overall", volumeForExercises.stream().mapToDouble(WorkoutVolumeDto::getValue).sum()));
-
-
-        dto.setExercises(exercises);
         dto.setVolumeForExercises(volumeForExercises);
-        dto.setVolumeForBodyParts(volumeForExercises); // todo
 
         return dto;
     }
@@ -79,12 +79,20 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
         LocalDateTime dateStart = localDate.atStartOfDay();
         LocalDateTime dateEnd = LocalDateTime.of(localDate, LocalTime.MAX);
 
-
         Workout workout = repository.findByUserIdAndDate(userId, dateStart, dateEnd);
 
-        WorkoutDto dto = workoutMapper.toDto(workout);
+        if (workout != null) {
+            return workoutMapper.toDto(workout, List.of("records"));
+        }
 
-        return dto;
+        Workout newWorkout = Workout.builder()
+                .date(DateFormatUtil.toDate(date))
+                .user(User.builder().id(userId).build())
+                .build();
+
+        repository.save(newWorkout);
+
+        return workoutMapper.toDto(newWorkout);
     }
 
     @Override
@@ -120,5 +128,12 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
             result.putIfAbsent(i, 0);
         }
         return result;
+    }
+
+    @Override
+    public void save(WorkoutDto dto) {
+        Workout workout = workoutMapper.fromDto(dto, List.of("records"));
+
+        repository.save(workout);
     }
 }

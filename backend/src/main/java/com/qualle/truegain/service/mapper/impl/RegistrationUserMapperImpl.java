@@ -6,16 +6,18 @@ import com.qualle.truegain.model.entity.User;
 import com.qualle.truegain.service.mapper.RegistrationUserMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class RegistrationUserMapperImpl implements RegistrationUserMapper {
 
     @Override
-    public RegistrationDto toDto(User user) {
+    public RegistrationDto toDto(User user, List<String> params) {
         return null; // Used only for user creation
     }
 
     @Override
-    public User fromDto(RegistrationDto dto) {
+    public User fromDto(RegistrationDto dto, List<String> params) {
 
         validate(dto);
 

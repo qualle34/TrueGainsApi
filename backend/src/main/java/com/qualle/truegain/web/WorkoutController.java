@@ -51,14 +51,9 @@ public class WorkoutController {
     }
 
     @PostMapping("/workout")
-    public void addWorkout(@RequestBody @Validated WorkoutDto dto) {
-        workoutService.save(dto);
-    }
+    public void saveWorkout(@RequestBody @Validated WorkoutDto dto) {
 
-    @PutMapping("/workout/{id}")
-    public void updateWorkout(@RequestParam @Validated Long userId, @RequestBody WorkoutDto dto) {
-
-        if (userId == 0) {
+        if (dto == null) {
             throw new BadRequestException();
         }
 
