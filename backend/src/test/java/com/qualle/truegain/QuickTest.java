@@ -1,5 +1,9 @@
 package com.qualle.truegain;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Encoders;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.*;
@@ -16,9 +20,5 @@ public class QuickTest {
 
         LocalDateTime dateStart = localDate.atStartOfDay();
         LocalDateTime dateEnd = LocalDateTime.of(localDate, LocalTime.MAX);
-
-
-
-//        System.out.println(currentDate);
     }
 }

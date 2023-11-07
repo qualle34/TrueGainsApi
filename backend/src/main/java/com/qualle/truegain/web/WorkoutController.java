@@ -1,10 +1,18 @@
 package com.qualle.truegain.web;
 
+import com.qualle.truegain.api.MainPageDataDto;
 import com.qualle.truegain.api.SimpleWorkoutDto;
 import com.qualle.truegain.api.WorkoutDto;
 import com.qualle.truegain.model.exception.BadRequestException;
+import com.qualle.truegain.model.security.TokenSecurityDetails;
+import com.qualle.truegain.model.security.UserSecurityDetails;
+import com.qualle.truegain.service.MainService;
 import com.qualle.truegain.service.WorkoutService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,42 +24,41 @@ public class WorkoutController {
 
     private final WorkoutService workoutService;
 
-    @GetMapping("/workout/{id}")
-    public WorkoutDto getWorkout(@PathVariable Long id) {
+    private final MainService mainService;
+
+    @GetMapping("/private/main")
+    public MainPageDataDto getWorkout(@AuthenticationPrincipal TokenSecurityDetails user) {
+        return mainService.getMainPageData(user.getId());
+    }
+
+    @GetMapping("/private/workout/{id}")
+    public WorkoutDto getWorkout(@AuthenticationPrincipal TokenSecurityDetails user, @PathVariable Long id) {
 
         if (id == 0) {
             throw new BadRequestException();
         }
 
+        // todo check user
         return workoutService.getById(id);
     }
 
-    @GetMapping("/workout/simple")
-    public List<SimpleWorkoutDto> getWorkoutByUserId(@RequestParam Long userId) {
-
-        if (userId == 0) {
-            throw new BadRequestException();
-        }
-
-        return workoutService.getByUserId(userId);
+    @GetMapping("/private/workout/simple")
+    public List<SimpleWorkoutDto> getWorkoutByUserId(@AuthenticationPrincipal TokenSecurityDetails user) {
+        return workoutService.getByUserId(user.getId());
     }
 
-    @GetMapping("/workout")
-    public WorkoutDto getWorkoutByUserIdAndDate(@RequestParam Long userId, @RequestParam String date) {
-
-        if (userId == 0) {
-            throw new BadRequestException();
-        }
+    @GetMapping("/private/workout")
+    public WorkoutDto getWorkoutByUserIdAndDate(@AuthenticationPrincipal TokenSecurityDetails user, @RequestParam String date) {
 
         if (date == null || date.isEmpty()) {
             throw new BadRequestException();
         }
 
-        return workoutService.getByUserIdAndDate(userId, date);
+        return workoutService.getByUserIdAndDate(user.getId(), date);
     }
 
-    @PostMapping("/workout")
-    public void saveWorkout(@RequestBody @Validated WorkoutDto dto) {
+    @PostMapping("/private/workout")
+    public void saveWorkout(@AuthenticationPrincipal TokenSecurityDetails user, @RequestBody @Validated WorkoutDto dto) {
 
         if (dto == null) {
             throw new BadRequestException();
@@ -60,8 +67,8 @@ public class WorkoutController {
         workoutService.save(dto);
     }
 
-    @DeleteMapping("/workout/{id}")
-    public void deleteWorkout(@PathVariable Long id) {
+    @DeleteMapping("/private/workout/{id}")
+    public void deleteWorkout(@AuthenticationPrincipal TokenSecurityDetails user, @PathVariable Long id) {
 
         if (id == 0) {
             throw new BadRequestException();

@@ -2,21 +2,26 @@ package com.qualle.truegain.service.impl;
 
 import com.qualle.truegain.api.CategoryDto;
 import com.qualle.truegain.api.ExerciseDto;
+import com.qualle.truegain.api.WorkoutDto;
 import com.qualle.truegain.model.entity.Exercise;
+import com.qualle.truegain.model.entity.Workout;
 import com.qualle.truegain.model.exception.EntityNotFoundException;
 import com.qualle.truegain.repository.CategoryRepository;
 import com.qualle.truegain.repository.ExerciseRepository;
 import com.qualle.truegain.service.ExerciseService;
+import com.qualle.truegain.service.basic.AbstractService;
 import com.qualle.truegain.service.mapper.CategoryMapper;
 import com.qualle.truegain.service.mapper.ExerciseMapper;
+import com.qualle.truegain.service.mapper.GenericMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ExerciseServiceImpl implements ExerciseService {
+public class ExerciseServiceImpl extends AbstractService<Exercise, ExerciseDto, Long>  implements ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
     private final CategoryRepository categoryRepository;
@@ -63,4 +68,13 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
 
+    @Override
+    protected CrudRepository<Exercise, Long> getRepository() {
+        return exerciseRepository;
+    }
+
+    @Override
+    protected GenericMapper<Exercise, ExerciseDto> getMapper() {
+        return exerciseMapper;
+    }
 }

@@ -10,5 +10,7 @@ import lombok.*;
 public class TokenDto {
 
     private String accessToken;
+    private String accessTokenExpiredAt;
     private String refreshToken;
+    private String refreshTokenExpiredAt;
 }

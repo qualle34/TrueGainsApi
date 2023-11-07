@@ -5,5 +5,7 @@ public enum ErrorType {
     SERVER_ERROR,
     BAD_REQUEST,
     NOT_FOUND,
-    ACCESS_DENIED
+    ACCESS_DENIED,
+    EXPIRED_TOKEN,
+    UNAUTHORIZED
 }

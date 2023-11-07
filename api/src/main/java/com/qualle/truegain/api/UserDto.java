@@ -14,4 +14,5 @@ public class UserDto {
     private String surname;
     private String birthday;
     private String gender;
+    private CredentialsDto credentials;
 }

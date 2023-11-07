@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS "image" CASCADE;
 DROP TABLE IF EXISTS "credentials" CASCADE;
 DROP TABLE IF EXISTS "user" CASCADE;
-DROP TABLE IF EXISTS "token" CASCADE;
+DROP TABLE IF EXISTS "session" CASCADE;
 DROP TABLE IF EXISTS "settings" CASCADE;
 DROP TABLE IF EXISTS "dimension" CASCADE;
 DROP TABLE IF EXISTS "user_dimension" CASCADE;
@@ -34,14 +34,13 @@ CREATE TABLE "credentials"
     "password" varchar
 );
 
-CREATE TABLE "token"
+CREATE TABLE "session"
 (
-    "id"                 bigserial PRIMARY KEY,
-    "access"             varchar,
-    "refresh"            varchar,
-    "user_id"            bigint,
-    "access_expired_at"  timestamp,
-    "refresh_expired_at" timestamp
+    "id"         varchar PRIMARY KEY,
+    "token_id"   varchar,
+    "user_id"    bigint,
+    "created_at" bigint,
+    "expired_at" bigint
 );
 
 CREATE TABLE "settings"
@@ -88,7 +87,7 @@ CREATE TABLE "exercise"
     "name"        varchar,
     "equipment"   varchar,
     "description" varchar,
-    "technique" varchar
+    "technique"   varchar
 );
 
 CREATE TABLE "record"
@@ -103,7 +102,7 @@ CREATE TABLE "record"
 ALTER TABLE "credentials"
     ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "token"
+ALTER TABLE "session"
     ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "settings"

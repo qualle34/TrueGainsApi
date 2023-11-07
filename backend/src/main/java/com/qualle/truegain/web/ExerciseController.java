@@ -2,8 +2,11 @@ package com.qualle.truegain.web;
 
 import com.qualle.truegain.api.CategoryDto;
 import com.qualle.truegain.api.ExerciseDto;
+import com.qualle.truegain.model.security.TokenSecurityDetails;
+import com.qualle.truegain.model.security.UserSecurityDetails;
 import com.qualle.truegain.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,12 +36,13 @@ public class ExerciseController {
     }
 
     @GetMapping("/exercise/{id}")
-    public ExerciseDto getExercise(@PathVariable long id, @RequestParam(name = "user-id", required = false, defaultValue = "0") long userId) {
-
-        if (userId != 0) {
-            return exerciseService.getExerciseWithRecordsByIdForUserId(id, userId);
-        }
-
+    public ExerciseDto getExercise(@PathVariable long id) {
         return exerciseService.getExercise(id);
+    }
+
+
+    @GetMapping("/private/exercise/{id}")
+    public ExerciseDto getExercise(@AuthenticationPrincipal TokenSecurityDetails user, @PathVariable long id) {
+        return exerciseService.getExerciseWithRecordsByIdForUserId(id, user.getId());
     }
 }

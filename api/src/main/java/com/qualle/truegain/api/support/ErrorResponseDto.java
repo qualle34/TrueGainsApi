@@ -14,11 +14,9 @@ public class ErrorResponseDto {
 
     private String type;
 
-    private String messageTitle;
-
     private String message;
 
-    private Map<String, String> additionalProperties;
+    private Map<String, String> additional;
 
     private Collection<String> stack;
 }
