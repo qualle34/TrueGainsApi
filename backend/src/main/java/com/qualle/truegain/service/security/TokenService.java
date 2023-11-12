@@ -8,5 +8,7 @@ public interface TokenService {
 
     String generateRefresh(TokenClaims claims);
 
+    String generateTemporary(TokenClaims claims);
+
     TokenClaims validate(String token);
 }

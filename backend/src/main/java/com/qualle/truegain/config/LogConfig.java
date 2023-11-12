@@ -28,7 +28,8 @@ public class LogConfig {
     }
 
     private void writeLog(HttpExchange exchange) {
-//        OffsetDateTime.ofInstant(exchange.getTimestamp(), TimeZone.getDefault().toZoneId())
+
+
 
         log.info(exchange.getRequest().getMethod() + " Request: " + exchange.getRequest().getUri() + "\n" +
                 "Headers: " + exchange.getRequest().getHeaders() + "\n" +

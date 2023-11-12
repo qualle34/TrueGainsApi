@@ -17,12 +17,12 @@ public class UserController {
 
     @GetMapping("/private/user")
     public UserDto getUser(@AuthenticationPrincipal TokenSecurityDetails user){
-        return userService.getUserByLogin(user.getUsername());
+        return userService.getUserWithCredentialsByLogin(user.getUsername());
     }
 
     @GetMapping("/private/profile")
     public UserDto getUserProfile(@AuthenticationPrincipal TokenSecurityDetails user){
-        return userService.getUserByLogin(user.getUsername());
+        return userService.getUserWithCredentialsByLogin(user.getUsername());
     }
 
     @PutMapping("/private/user")

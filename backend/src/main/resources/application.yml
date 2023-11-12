@@ -19,11 +19,18 @@ spring:
 
 authentication:
   token:
-    issued-by: truegain-api
-    lifetime: 30m
-    secret: QFQ1HVPw53Xjlv2Is4oO9mIrG7LYq4WOKZBW820t1b0=
+    issued-by: ${TRUEGAIN_AUTH_TOKEN_ISSUED:truegain-api}
+    lifetime: ${TRUEGAIN_AUTH_TOKEN_LIFETIME:30m}
+    secret: ${TRUEGAIN_AUTH_TOKEN_SECRET:QFQ1HVPw53Xjlv2Is4oO9mIrG7LYq4WOKZBW820t1b0=}
   session:
-    lifetime: 30d
+    lifetime: ${TRUEGAIN_AUTH_SESSION_LIFETIME:30d}
+  temporary:
+    lifetime: ${TRUEGAIN_AUTH_TEMP_LIFETIME:1d}
+
+email:
+  enable: ${TRUEGAIN_EMAIL_ENABLE:true}
+  login: ${TRUEGAIN_EMAIL_LOGIN:qualle.inc@gmail.com}
+  password: ${TRUEGAIN_EMAIL_PASSWORD:aaa}
 
 management:
   endpoints:

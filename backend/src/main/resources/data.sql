@@ -121,15 +121,17 @@ INSERT INTO "image"(link) values('test_barbell_bench_press');
 INSERT INTO "image"(link) values('test_barbell_bench_press');
 INSERT INTO "image"(link) values('test_barbell_bench_press');
 
+INSERT INTO "user"(name, birthday, gender, image_id, enabled, locked) values('Антоний', '1981-05-22', 'M', 1, true, false);
+INSERT INTO "user"(name, birthday, gender, image_id, enabled, locked) values('Валерия', '1981-05-22', 'F', 1, true, false);
+INSERT INTO "user"(name, birthday, gender, image_id, enabled, locked) values('Алексей', '1981-05-22', 'M', 1, true, true);
 
-INSERT INTO "user"(name, surname, birthday, gender) values('Василиса', 'Егорова', '1981-05-22', 'W');
-INSERT INTO "user"(name, surname, birthday, gender) values('Валерия', 'Щербаков', '1981-05-22', 'W');
-
-INSERT INTO "credentials"(user_id, login, password) values(1, 'rock', '$2a$10$w9Xvn7V.w6XTMoCrLyPIX.X/gnSaSavaRhO2yVEFNwrlb4kqj4jhe');
-INSERT INTO "credentials"(user_id, login, password) values(2, 'lera', '$2a$10$w9Xvn7V.w6XTMoCrLyPIX.X/gnSaSavaRhO2yVEFNwrlb4kqj4jhe');
+INSERT INTO "credentials"(user_id, login, email, role, password) values(1, 'user', 'antonsamoilo@gmail.com', 'USER', '$2a$10$w9Xvn7V.w6XTMoCrLyPIX.X/gnSaSavaRhO2yVEFNwrlb4kqj4jhe');
+INSERT INTO "credentials"(user_id, login, email, role, password) values(2, 'lera', 'lera@qualle.test', 'USER', '$2a$10$w9Xvn7V.w6XTMoCrLyPIX.X/gnSaSavaRhO2yVEFNwrlb4kqj4jhe');
+INSERT INTO "credentials"(user_id, login, email, role, password) values(3, 'alexi', 'alexi@qualle.test', 'USER', '$2a$10$w9Xvn7V.w6XTMoCrLyPIX.X/gnSaSavaRhO2yVEFNwrlb4kqj4jhe');
 
 INSERT INTO "settings"(user_id, language, units) values(1, 'en', 'metric');
 INSERT INTO "settings"(user_id, language, units) values(2, 'ru', 'metric');
+INSERT INTO "settings"(user_id, language, units) values(3, 'ru', 'metric');
 
 INSERT INTO "category"(name, image_id) values('Chest', 1);
 INSERT INTO "category"(name, image_id) values('Back', 2);

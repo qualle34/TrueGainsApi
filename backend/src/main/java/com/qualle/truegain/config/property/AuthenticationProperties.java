@@ -15,6 +15,7 @@ public class AuthenticationProperties {
 
     private TokenProperties token;
     private SessionProperties session;
+    private TemporaryProperties temporary;
 
     @Getter
     @Setter
@@ -27,6 +28,12 @@ public class AuthenticationProperties {
     @Getter
     @Setter
     public static class SessionProperties {
+        private Duration lifetime;
+    }
+
+    @Getter
+    @Setter
+    public static class TemporaryProperties {
         private Duration lifetime;
     }
 }

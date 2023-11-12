@@ -8,6 +8,8 @@ public interface AuthenticationService {
 
     TokenDto authenticate(LoginPasswordAuthenticationDto dto);
 
+    TokenDto token(long userId);
+
     TokenDto refresh(RefreshTokenAuthenticationDto dto);
 
     void logout(RefreshTokenAuthenticationDto dto);

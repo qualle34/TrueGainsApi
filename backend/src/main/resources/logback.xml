@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
     <property name="LOGS" value="./logs" />
-
-    <appender name="Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1}): %msg%n%throwable
-            </Pattern>
-        </layout>
-    </appender>
 
     <appender name="RollingFile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -32,17 +25,11 @@
         </rollingPolicy>
     </appender>
 
-    <!-- LOG everything at INFO level -->
-    <root level="info">
-<!--        <appender-ref ref="RollingFile" />-->
-        <appender-ref ref="Console" />
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
     </root>
 
-    <!-- LOG "com.baeldung*" at TRACE level -->
-    <logger name="com.qualle.truegain" level="trace" additivity="false">
-<!--        <appender-ref ref="RollingFile" />-->
-        <appender-ref ref="Console" />
-    </logger>
+    <logger name="org.springframework.web" level="DEBUG"/>
 
 <!--  <logger name="org.springframework" level="trace" additivity="false">-->
 <!--&lt;!&ndash;        <appender-ref ref="RollingFile" />&ndash;&gt;-->

@@ -1,5 +1,6 @@
 package com.qualle.truegain.service.security;
 
+import com.qualle.truegain.api.support.ErrorType;
 import com.qualle.truegain.config.property.AuthenticationProperties;
 import com.qualle.truegain.model.exception.TokenAuthenticationException;
 import com.qualle.truegain.model.security.TokenClaims;
@@ -35,6 +36,7 @@ public class JwtTokenService implements TokenService {
                 .id(claims.getTokenId())
                 .claim("roles", claims.getRoles())
                 .claim("uid", claims.getUserId())
+                .claim("type", "access")
                 .subject(claims.getSubject())
                 .issuer(claims.getIssuedBy())
                 .notBefore(claims.getIssuedAt())
@@ -50,10 +52,24 @@ public class JwtTokenService implements TokenService {
                 .id(claims.getTokenId())
                 .claim("session", claims.getSessionId())
                 .claim("uid", claims.getUserId())
+                .claim("type", "refresh")
                 .subject(claims.getSubject())
                 .issuer(claims.getIssuedBy())
                 .issuedAt(claims.getIssuedAt())
                 .expiration(claims.getRefreshExpiredAt())
+                .signWith(key)
+                .compact();
+    }
+
+    @Override
+    public String generateTemporary(TokenClaims claims) {
+        return Jwts.builder()
+                .id(claims.getTokenId())
+                .claim("uid", claims.getUserId())
+                .claim("type", "temp")
+                .issuer(claims.getIssuedBy())
+                .issuedAt(claims.getIssuedAt())
+                .expiration(claims.getTemporaryExpiredAt())
                 .signWith(key)
                 .compact();
     }
@@ -67,31 +83,35 @@ public class JwtTokenService implements TokenService {
                     .parseSignedClaims(token)
                     .getPayload();
 
-            TokenClaims claims = TokenClaims.builder()
-                    .subject(payload.getSubject())
+            TokenClaims.TokenClaimsBuilder claims = TokenClaims.builder()
                     .tokenId(payload.getId())
                     .issuedAt(payload.getIssuedAt())
                     .issuedBy(payload.getIssuer())
-                    .userId(payload.get("uid", Long.class))
-                    .build();
+                    .userId(payload.get("uid", Long.class));
 
-            if (payload.containsKey("roles")) {
-                claims.setRoles(payload.get("roles", List.class));
-                claims.setAccessExpiredAt(payload.getExpiration());
+            switch (payload.get("type").toString()) {
+                case "access" -> claims
+                        .subject(payload.getSubject())
+                        .roles(payload.get("roles", List.class))
+                        .accessExpiredAt(payload.getExpiration());
+
+                case "refresh" -> claims
+                        .subject(payload.getSubject())
+                        .sessionId(payload.get("session", String.class))
+                        .refreshExpiredAt(payload.getExpiration());
+
+                case "temp" -> claims
+                        .temporaryExpiredAt(payload.getExpiration());
             }
 
-            if (payload.containsKey("session")) {
-                claims.setSessionId(payload.get("session", String.class));
-                claims.setRefreshExpiredAt(payload.getExpiration());
-            }
-
-            return claims;
+            return claims.build();
         } catch (ExpiredJwtException e) {
-            throw new TokenAuthenticationException(e.getMessage(), e, true);
+            throw new TokenAuthenticationException(e.getMessage(), e, ErrorType.EXPIRED_TOKEN);
 
         } catch (JwtException e) {
             throw new TokenAuthenticationException(e.getMessage(), e);
         }
 
     }
+
 }

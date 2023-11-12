@@ -1,12 +1,14 @@
 package com.qualle.truegain.model.exception;
 
-public class EntityNotFoundException extends RuntimeException {
+import com.qualle.truegain.api.support.ErrorType;
+
+public class EntityNotFoundException extends GenericApplicationException {
 
     public EntityNotFoundException() {
+        super(ErrorType.NOT_FOUND, null);
     }
 
     public EntityNotFoundException(String message) {
-
-        super(message);
+        super(message, ErrorType.NOT_FOUND, null);
     }
 }

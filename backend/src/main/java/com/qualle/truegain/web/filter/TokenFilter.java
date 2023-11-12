@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -44,8 +46,13 @@ public class TokenFilter extends OncePerRequestFilter {
             if (claims != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 TokenSecurityDetails tokenDetails = new TokenSecurityDetails(claims);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(tokenDetails, null,
-                        claims.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+                List<SimpleGrantedAuthority> roles = new ArrayList<>();
+
+                if (claims.getRoles() != null) {
+                    roles = claims.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+                }
+
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(tokenDetails, null, roles);
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

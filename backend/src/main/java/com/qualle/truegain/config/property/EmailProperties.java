@@ -5,15 +5,15 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
+import java.util.Properties;
 
 @Getter
 @Setter
 @Component
-@ConfigurationProperties("token")
-public class TokenProperties {
+@ConfigurationProperties("email")
+public class EmailProperties {
 
-    private String issued;
-    private Duration lifetime;
-    private String secret;
+    private String login;
+    private String password;
+    private boolean enable;
 }

@@ -1,16 +1,18 @@
 package com.qualle.truegain.service.impl;
 
-import com.qualle.truegain.api.RegistrationDto;
 import com.qualle.truegain.api.UserDto;
+import com.qualle.truegain.api.support.ErrorType;
+import com.qualle.truegain.model.entity.Confirmation;
 import com.qualle.truegain.model.entity.User;
+import com.qualle.truegain.model.exception.BadRequestException;
 import com.qualle.truegain.model.exception.EntityNotFoundException;
 import com.qualle.truegain.model.security.UserSecurityDetails;
 import com.qualle.truegain.repository.UserRepository;
 import com.qualle.truegain.service.UserService;
 import com.qualle.truegain.service.basic.AbstractService;
 import com.qualle.truegain.service.mapper.GenericMapper;
-import com.qualle.truegain.service.mapper.RegistrationUserMapper;
 import com.qualle.truegain.service.mapper.UserMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -26,19 +29,40 @@ public class UserServiceImpl extends AbstractService<User, UserDto, Long> implem
 
     private final UserRepository repository;
     private final UserMapper mapper;
-    private final RegistrationUserMapper registrationMapper;
 
     @Override
-    public UserDto getUserByLogin(String login) {
+    public UserDto getUserWithCredentialsByLogin(String login) {
         User user = repository.findUserWithCredentials(login);
+
+        return mapper.toDto(user, List.of("image", "credentials"));
+    }
+
+    @Override
+    public UserDto getUserWithCredentialsById(long id) {
+        User user = repository.findUserWithCredentials(id);
 
         return mapper.toDto(user, List.of("credentials"));
     }
 
     @Override
-    public void registerUser(RegistrationDto dto) {
-        User user = registrationMapper.fromDto(dto);
+    @Transactional
+    public void verifyUser(long userId, int code) {
+        User user = repository.findUserWithConfirmation(userId);
 
+        Confirmation confirmation = user.getConfirmation();
+
+        if (confirmation == null) {
+            throw new BadRequestException("Unable to confirm user registration. Confirmation is not available.", ErrorType.CONFIRMATION_FAIL);
+        }
+
+        if (confirmation.getCode() != code) {
+            throw new BadRequestException("Unable to confirm user registration. Confirmation code is not valid.", ErrorType.CONFIRMATION_FAIL, Map.of("reason", "incorrect_code"));
+        }
+
+        repository.deleteConfirmationForUser(userId);
+
+        user.setConfirmation(null);
+        user.setEnabled(true);
         repository.save(user);
     }
 

@@ -1,5 +1,6 @@
 package com.qualle.truegain.api;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -7,12 +8,19 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistrationDto {
+public class NewRegistrationDto {
 
+    @NotBlank
     private String name;
-    private String surname;
     private String birthday;
     private String gender;
+
+    @NotBlank
     private String login;
+
+    @NotBlank
+    private String email;
+
+    @NotBlank
     private String password;
 }

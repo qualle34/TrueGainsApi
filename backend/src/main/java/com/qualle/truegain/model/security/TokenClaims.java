@@ -1,6 +1,5 @@
 package com.qualle.truegain.model.security;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 
 import java.util.Date;
@@ -22,5 +21,6 @@ public class TokenClaims {
     private Date issuedAt;
     private Date accessExpiredAt;
     private Date refreshExpiredAt;
+    private Date temporaryExpiredAt;
 
 }

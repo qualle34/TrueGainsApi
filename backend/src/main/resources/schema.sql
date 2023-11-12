@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS "image" CASCADE;
 DROP TABLE IF EXISTS "credentials" CASCADE;
+DROP TABLE IF EXISTS "confirmation" CASCADE;
 DROP TABLE IF EXISTS "user" CASCADE;
 DROP TABLE IF EXISTS "session" CASCADE;
 DROP TABLE IF EXISTS "settings" CASCADE;
@@ -21,17 +22,27 @@ CREATE TABLE "user"
 (
     "id"       bigserial PRIMARY KEY,
     "name"     varchar,
-    "surname"  varchar,
     "birthday" varchar,
     "gender"   varchar,
-    "image_id" bigint
+    "image_id" bigint,
+    "enabled"  boolean,
+    "locked"   boolean
 );
 
 CREATE TABLE "credentials"
 (
     "user_id"  bigint PRIMARY KEY,
     "login"    varchar,
+    "email"    varchar,
+    "role"     varchar,
     "password" varchar
+);
+
+CREATE TABLE "confirmation"
+(
+    "user_id"    bigint PRIMARY KEY,
+    "code"       integer,
+    "created_at" timestamp
 );
 
 CREATE TABLE "session"

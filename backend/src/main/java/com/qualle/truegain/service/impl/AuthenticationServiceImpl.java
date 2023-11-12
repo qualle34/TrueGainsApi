@@ -41,7 +41,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getLogin(), dto.getPassword()));
 
-        UserDto user = userService.getUserByLogin(dto.getLogin());
+        UserDto user = userService.getUserWithCredentialsByLogin(dto.getLogin());
+
+        return token(user);
+    }
+
+    @Override
+    public TokenDto token(long userId) {
+        UserDto user = userService.getUserWithCredentialsById(userId);
+
+        return token(user);
+    }
+
+    private TokenDto token(UserDto user) {
 
         String tokenId = UUID.randomUUID().toString();
         Date now = new Date();
@@ -60,7 +72,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         session.setUser(user1);
 
         Session createdSession = sessionService.save(session);
-
 
         TokenClaims claims = TokenClaims.builder()
                 .subject(user.getCredentials().getLogin())

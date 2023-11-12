@@ -1,24 +1,18 @@
 package com.qualle.truegain.model.exception;
 
-public class TokenAuthenticationException extends RuntimeException {
+import com.qualle.truegain.api.support.ErrorType;
 
-    private boolean tokenExpired = false;
+public class TokenAuthenticationException extends GenericApplicationException {
 
-    public TokenAuthenticationException(String msg) {
-        super(msg);
+    public TokenAuthenticationException(String message) {
+        super(message, ErrorType.ACCESS_DENIED, null);
     }
 
-    public TokenAuthenticationException(String msg, Throwable cause) {
-        super(msg, cause);
+    public TokenAuthenticationException(String message, Throwable cause) {
+        super(message, cause, ErrorType.ACCESS_DENIED, null);
     }
 
-
-    public TokenAuthenticationException(String msg, Throwable cause, boolean tokenExpired) {
-        super(msg, cause);
-        this.tokenExpired = tokenExpired;
-    }
-
-    public boolean isTokenExpired() {
-        return tokenExpired;
+    public TokenAuthenticationException(String message, Throwable cause, ErrorType errorType) {
+        super(message, cause, ErrorType.ACCESS_DENIED, null);
     }
 }
