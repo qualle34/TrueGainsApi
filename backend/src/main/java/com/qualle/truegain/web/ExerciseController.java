@@ -45,4 +45,9 @@ public class ExerciseController {
     public ExerciseDto getExercise(@AuthenticationPrincipal TokenSecurityDetails user, @PathVariable long id) {
         return exerciseService.getExerciseWithRecordsByIdForUserId(id, user.getId());
     }
+
+    @GetMapping("/private/chart/{id}")
+    public ExerciseDto getChartsForExercise(@AuthenticationPrincipal TokenSecurityDetails user, @PathVariable long id) {
+        return exerciseService.getExerciseWithChartsByUserId(id, user.getId());
+    }
 }

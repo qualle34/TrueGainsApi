@@ -18,4 +18,6 @@ public interface ExerciseService {
     ExerciseDto getExerciseWithRecordsByIdForUserId(long id, long userId);
 
     List<ExerciseDto> getExerciseWithRecordsByWorkoutId(long workoutId);
+
+    ExerciseDto getExerciseWithChartsByUserId(long id, long userId);
 }

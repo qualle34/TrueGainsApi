@@ -2,7 +2,9 @@ package com.qualle.truegain.api;
 
 import lombok.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,4 +19,6 @@ public class ExerciseDto {
     private String description;
     private String imageLink;
     private List<RecordDto> records;
+    private Map<Float, Float> maxRepData;
+    private Map<Float, Float> loadData;
 }
