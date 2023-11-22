@@ -11,6 +11,8 @@ spring:
       connection-timeout: 10000
       validation-timeout: 2000
       maximum-pool-size: 20
+  flyway:
+    baseline-on-migrate: true
   sql:
     init:
       mode: always

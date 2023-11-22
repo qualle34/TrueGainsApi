@@ -7,6 +7,8 @@ import com.qualle.truegain.api.TokenDto;
 import com.qualle.truegain.service.RegistrationService;
 import com.qualle.truegain.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
