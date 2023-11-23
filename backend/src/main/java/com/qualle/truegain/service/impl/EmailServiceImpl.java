@@ -1,6 +1,6 @@
 package com.qualle.truegain.service.impl;
 
-import com.qualle.truegain.config.property.EmailProperties;
+import com.qualle.truegain.config.property.ConfirmationProperties;
 import com.qualle.truegain.model.email.UserEmail;
 import com.qualle.truegain.model.email.VerificationCode;
 import com.qualle.truegain.service.EmailService;
@@ -10,7 +10,6 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -26,11 +25,11 @@ public class EmailServiceImpl implements EmailService {
     @Value("classpath:email/letter_code.html")
     private Resource letter;
 
-    private final EmailProperties properties;
+    private final ConfirmationProperties properties;
     private final Properties smtpProperties;
     private String content;
 
-    public EmailServiceImpl(EmailProperties properties) {
+    public EmailServiceImpl(ConfirmationProperties properties) {
         this.properties = properties;
 
         smtpProperties = new Properties();
@@ -53,6 +52,10 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public VerificationCode sendVerificationLetter(UserEmail email) {
 
+        if (!properties.getEmail().isEnable()) {
+            return VerificationCode.builder().code(111111).build();
+        }
+
         VerificationCode verification = VerificationCode.builder()
                 .code(generateCode())
                 .build();
@@ -60,7 +63,7 @@ public class EmailServiceImpl implements EmailService {
         Authenticator authenticator = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(properties.getLogin(), properties.getPassword());
+                return new PasswordAuthentication(properties.getEmail().getLogin(), properties.getEmail().getPassword());
             }
         };
 
@@ -69,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(properties.getLogin()));
+            message.setFrom(new InternetAddress(properties.getEmail().getLogin()));
 
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email.getEmail()));
             message.setSubject("Activate your True Gains account");

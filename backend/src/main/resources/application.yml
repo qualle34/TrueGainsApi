@@ -27,12 +27,14 @@ authentication:
   session:
     lifetime: ${TRUEGAIN_AUTH_SESSION_LIFETIME:30d}
   temporary:
-    lifetime: ${TRUEGAIN_AUTH_TEMP_LIFETIME:1d}
+    lifetime: ${confirmation.lifetime}
 
-email:
-  enable: ${TRUEGAIN_EMAIL_ENABLE:true}
-  login: ${TRUEGAIN_EMAIL_LOGIN:qualle.inc@gmail.com}
-  password: ${TRUEGAIN_EMAIL_PASSWORD:aaa}
+confirmation:
+  email:
+    enable: ${TRUEGAIN_EMAIL_ENABLE:false}
+    login: ${TRUEGAIN_EMAIL_LOGIN:qualle.inc@gmail.com}
+    password: ${TRUEGAIN_EMAIL_PASSWORD:aaa}
+  lifetime: ${TRUEGAIN_CONFIRM_LIFETIME:1d}
 
 management:
   endpoints:
