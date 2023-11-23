@@ -21,6 +21,7 @@ public class Exercise {
     private String name;
     private String equipment;
     private String description;
+    private String technique;
 
     @ManyToOne
     private Image image;

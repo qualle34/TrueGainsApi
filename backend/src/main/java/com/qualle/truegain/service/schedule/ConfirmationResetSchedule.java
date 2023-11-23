@@ -18,7 +18,7 @@ public class ConfirmationResetSchedule {
     private final UserRepository repository;
     private final ConfirmationProperties properties;
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(cron = "0 0 1 * * MON")
     @Transactional
     public void scheduleFixedDelayTask() {
         log.info("Delete old confirmations");

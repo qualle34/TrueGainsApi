@@ -27,6 +27,9 @@ public interface ExerciseRepository extends CrudRepository<Exercise, Long> {
     @Query("SELECT w.date as date, r as record FROM Record r INNER JOIN r.workout w WHERE r.exercise.id = :id AND w.user.id = :userId")
     List<Map<String, Object>> findRecordsByUserAndExerciseGroupByDate(long id, long userId);
 
+    @Query("SELECT COUNT(e.id) AS count, e AS exercise FROM Exercise e LEFT JOIN  e.records r LEFT JOIN r.workout w WHERE w.user.id = :userId GROUP BY e.id ORDER BY e.id")
+    List<Map<String, Object>> findFrequentlyUsedExercises(long userId);
+
     @Query("FROM Exercise e LEFT JOIN FETCH e.image i WHERE e.id = :id")
     Exercise findByIdWithImage(long id);
 }

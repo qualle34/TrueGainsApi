@@ -15,8 +15,10 @@ public class ExerciseDto {
 
     private long id;
     private String name;
+    private String summary;
     private String equipment;
     private String description;
+    private String technique;
     private String imageLink;
     private List<RecordDto> records;
     private Map<Float, Float> maxRepData;

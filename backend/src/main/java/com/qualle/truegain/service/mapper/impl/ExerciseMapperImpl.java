@@ -25,6 +25,7 @@ public class ExerciseMapperImpl implements ExerciseMapper {
                 .name(exercise.getName())
                 .equipment(exercise.getEquipment())
                 .description(exercise.getDescription())
+                .technique(exercise.getTechnique())
                 .build();
 
         if (params.contains("image") && exercise.getImage() != null) {

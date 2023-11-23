@@ -2,6 +2,7 @@ package com.qualle.truegain.service.impl;
 
 import com.qualle.truegain.api.CategoryDto;
 import com.qualle.truegain.api.ExerciseDto;
+import com.qualle.truegain.api.SimpleExerciseDto;
 import com.qualle.truegain.model.entity.Exercise;
 import com.qualle.truegain.model.entity.Record;
 import com.qualle.truegain.model.exception.EntityNotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,37 @@ public class ExerciseServiceImpl extends AbstractService<Exercise, ExerciseDto, 
     }
 
     @Override
+    public List<SimpleExerciseDto> getFrequentlyUsedExercises(long userId, int count) {
+        List<Map<String, Object>> exercises = exerciseRepository.findFrequentlyUsedExercises(userId);
+
+        List<SimpleExerciseDto> result = new ArrayList<>();
+
+
+        int i = 1;
+        for (Map<String, Object> map : exercises) {
+
+            if (i == count) {
+                break;
+            }
+
+            long recordCount = (long) map.get("count");
+            Exercise exercise = (Exercise) map.get("exercise");
+
+            SimpleExerciseDto dto = SimpleExerciseDto.builder()
+                    .id(exercise.getId())
+                    .name(exercise.getName())
+                    .equipment(exercise.getEquipment())
+                    .recordCount((int) recordCount)
+                    .build();
+
+            result.add(dto);
+            i++;
+        }
+
+        return result;
+    }
+
+    @Override
     public List<ExerciseDto> getExerciseWithRecordsByWorkoutId(long workoutId) {
         return exerciseMapper.toDto(exerciseRepository.findAllExercisesWithRecordsByWorkoutId(workoutId));
     }
@@ -82,25 +115,39 @@ public class ExerciseServiceImpl extends AbstractService<Exercise, ExerciseDto, 
         Map<Float, Float> maxRepData = new HashMap<>();
         Map<Float, Float> loadData = new HashMap<>();
 
+        float maxRep = 0;
+        float maxLoad = 0;
+        float totalLoad = 0;
+
         for (Map<String, Object> map : records) {
 
             LocalDateTime date = (LocalDateTime) map.get("date");
             Record record = (Record) map.get("record");
 
             float dayNum = (float) date.toInstant(ZoneOffset.UTC).getEpochSecond() / 86400;
+            float load = record.getWeight() * record.getReps();
 
-            loadData.put(dayNum, record.getWeight() * record.getReps());
+            if (load > maxLoad) {
+                maxLoad = load;
+            }
+
+            totalLoad += load;
+
+            loadData.put(dayNum, load);
 
             if (record.getReps() == 1) {
                 maxRepData.put(dayNum, record.getWeight());
-            }
 
+                if (record.getWeight() > maxRep) {
+                    maxRep = record.getWeight();
+                }
+            }
         }
 
         dto.setLoadData(loadData);
         dto.setMaxRepData(maxRepData);
 
-        dto.setImageLink(dto.getImageLink() + ".png");
+        dto.setSummary("1 Rep max: " + (maxRep == 0 ? " - " : maxRep + " Kg") + "\nMax load: " + maxLoad + " Kg\nTotal load: " + totalLoad + " Kg");
 
         return dto;
     }
