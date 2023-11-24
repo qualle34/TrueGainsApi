@@ -7,6 +7,7 @@ import com.qualle.truegain.model.entity.User;
 import com.qualle.truegain.model.exception.BadRequestException;
 import com.qualle.truegain.model.exception.EntityNotFoundException;
 import com.qualle.truegain.model.security.UserSecurityDetails;
+import com.qualle.truegain.repository.ConfirmationRepository;
 import com.qualle.truegain.repository.UserRepository;
 import com.qualle.truegain.service.UserService;
 import com.qualle.truegain.service.basic.AbstractService;
@@ -28,6 +29,7 @@ import java.util.Objects;
 public class UserServiceImpl extends AbstractService<User, UserDto, Long> implements UserService {
 
     private final UserRepository repository;
+    private final ConfirmationRepository confirmationRepository;
     private final UserMapper mapper;
 
     @Override
@@ -45,7 +47,7 @@ public class UserServiceImpl extends AbstractService<User, UserDto, Long> implem
     }
 
     @Override
-    @Transactional
+    @Transactional(dontRollbackOn = BadRequestException.class)
     public void verifyUser(long userId, int code) {
         User user = repository.findUserWithConfirmation(userId);
 
@@ -56,10 +58,20 @@ public class UserServiceImpl extends AbstractService<User, UserDto, Long> implem
         }
 
         if (confirmation.getCode() != code) {
+
+            if (confirmation.getFails() >= 2) {
+                user.setLocked(true);
+                confirmationRepository.updateConfirmationFailsForUser(userId, confirmation.getFails() + 1);
+                repository.save(user);
+                throw new BadRequestException("Unable to confirm user registration. Confirmation code is not valid. User locked.", ErrorType.CONFIRMATION_FAIL, Map.of("reason", "incorrect_code_user_locked"));
+            }
+
+            confirmationRepository.updateConfirmationFailsForUser(userId, confirmation.getFails() + 1);
+
             throw new BadRequestException("Unable to confirm user registration. Confirmation code is not valid.", ErrorType.CONFIRMATION_FAIL, Map.of("reason", "incorrect_code"));
         }
 
-        repository.deleteConfirmationForUser(userId);
+        confirmationRepository.deleteConfirmationForUser(userId);
 
         user.setConfirmation(null);
         user.setEnabled(true);

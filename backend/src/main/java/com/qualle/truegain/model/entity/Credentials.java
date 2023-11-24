@@ -13,9 +13,8 @@ import lombok.*;
 public class Credentials {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private long userId;
+    private long id;
     private String login;
     private String email;
     private String role;
@@ -23,5 +22,6 @@ public class Credentials {
 
     @MapsId
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 }

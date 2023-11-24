@@ -4,11 +4,10 @@ import com.qualle.truegain.api.ConfirmRegistrationDto;
 import com.qualle.truegain.api.NewRegistrationDto;
 import com.qualle.truegain.api.RefreshTokenAuthenticationDto;
 import com.qualle.truegain.api.TokenDto;
+import com.qualle.truegain.repository.ConfirmationRepository;
+import com.qualle.truegain.repository.UserRepository;
 import com.qualle.truegain.service.RegistrationService;
-import com.qualle.truegain.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegistrationController {
 
     private final RegistrationService registrationService;
+    private final ConfirmationRepository re;
+    private final UserRepository res;
 
     @PostMapping("/registration/new")
     public RefreshTokenAuthenticationDto registerNewUser(@RequestBody NewRegistrationDto dto) {

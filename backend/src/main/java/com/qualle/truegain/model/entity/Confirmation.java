@@ -24,6 +24,8 @@ public class Confirmation {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    private int fails;
+
     @MapsId
     @OneToOne
     private User user;

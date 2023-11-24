@@ -1,0 +1,1 @@
+ALTER TABLE confirmation ADD COLUMN fails integer DEFAULT 0;
