@@ -52,8 +52,7 @@ public class ExerciseServiceImpl extends AbstractService<Exercise, ExerciseDto, 
 
     @Override
     public ExerciseDto getExercise(long id) {
-        return exerciseMapper.toDto(exerciseRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new));
+        return exerciseMapper.toDto(exerciseRepository.findByIdWithImage(id), List.of("image"));
     }
 
     @Override

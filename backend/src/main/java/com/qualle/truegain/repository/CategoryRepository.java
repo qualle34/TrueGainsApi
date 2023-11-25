@@ -13,6 +13,6 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     @Query("FROM Category c LEFT JOIN FETCH c.image ORDER BY c.id")
     List<Category> findAllWithImage();
 
-    @Query("FROM Category c LEFT JOIN FETCH c.image LEFT JOIN FETCH c.exercises e LEFT JOIN FETCH e.image ORDER BY c.id")
+    @Query("FROM Category c LEFT JOIN FETCH c.image LEFT JOIN FETCH c.exercises e LEFT JOIN FETCH e.image LEFT JOIN FETCH e.icon ORDER BY c.id")
     List<Category> findAllWithExerciseAndImage();
 }

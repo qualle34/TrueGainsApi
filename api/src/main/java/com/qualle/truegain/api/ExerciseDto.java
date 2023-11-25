@@ -20,6 +20,7 @@ public class ExerciseDto {
     private String description;
     private String technique;
     private String imageLink;
+    private String iconLink;
     private List<RecordDto> records;
     private Map<Float, Float> maxRepData;
     private Map<Float, Float> loadData;

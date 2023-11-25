@@ -31,7 +31,8 @@ CREATE TABLE "confirmation"
 (
     "user_id"    bigint PRIMARY KEY,
     "code"       integer,
-    "created_at" timestamp
+    "created_at" timestamp,
+    fails        integer DEFAULT 0
 );
 
 CREATE TABLE "session"
@@ -82,6 +83,7 @@ CREATE TABLE "category"
 CREATE TABLE "exercise"
 (
     "id"          bigserial PRIMARY KEY,
+    "icon_id"     bigint,
     "image_id"    bigint,
     "category_id" bigint,
     "name"        varchar,

@@ -30,6 +30,7 @@ public class ExerciseMapperImpl implements ExerciseMapper {
 
         if (params.contains("image") && exercise.getImage() != null) {
             dto.setImageLink(exercise.getImage().getLink());
+            dto.setIconLink(exercise.getIcon().getLink());
         }
 
         if (params.contains("records") && exercise.getRecords() != null) {

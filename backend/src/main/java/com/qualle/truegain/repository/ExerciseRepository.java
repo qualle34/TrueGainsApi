@@ -30,6 +30,6 @@ public interface ExerciseRepository extends CrudRepository<Exercise, Long> {
     @Query("SELECT COUNT(e.id) AS count, e AS exercise FROM Exercise e LEFT JOIN  e.records r LEFT JOIN r.workout w WHERE w.user.id = :userId GROUP BY e.id ORDER BY e.id")
     List<Map<String, Object>> findFrequentlyUsedExercises(long userId);
 
-    @Query("FROM Exercise e LEFT JOIN FETCH e.image i WHERE e.id = :id")
+    @Query("FROM Exercise e LEFT JOIN FETCH e.image im LEFT JOIN FETCH e.icon ic WHERE e.id = :id")
     Exercise findByIdWithImage(long id);
 }

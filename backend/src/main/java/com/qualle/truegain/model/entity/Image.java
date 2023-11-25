@@ -23,7 +23,10 @@ public class Image {
     private List<User> users;
 
     @OneToMany(mappedBy = "image", fetch = FetchType.LAZY)
-    private List<Exercise> exercises;
+    private List<Exercise> exercisesImage;
+
+    @OneToMany(mappedBy = "icon", fetch = FetchType.LAZY)
+    private List<Exercise> exercisesIcon;
 
     @OneToMany(mappedBy = "image", fetch = FetchType.LAZY)
     private List<Category> categories;

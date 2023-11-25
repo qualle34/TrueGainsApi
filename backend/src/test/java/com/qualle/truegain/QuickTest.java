@@ -31,6 +31,13 @@ public class QuickTest {
         }
     }
 
+    @Test
+    public void test2(){
+        for (int i = 122; i < 122 * 2; i++) {
+            System.out.println(i + ", ");
+        }
+    }
+
     private static final String initsql =
             "create table guides\n" +
                     "(\n" +
