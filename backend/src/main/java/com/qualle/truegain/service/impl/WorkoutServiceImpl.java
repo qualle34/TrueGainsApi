@@ -1,18 +1,14 @@
 package com.qualle.truegain.service.impl;
 
-import com.qualle.truegain.api.ExerciseDto;
-import com.qualle.truegain.api.SimpleWorkoutDto;
-import com.qualle.truegain.api.WorkoutDto;
-import com.qualle.truegain.api.WorkoutVolumeDto;
+import com.qualle.truegain.api.*;
 import com.qualle.truegain.model.entity.User;
 import com.qualle.truegain.model.entity.Workout;
-import com.qualle.truegain.model.exception.EntityNotFoundException;
+import com.qualle.truegain.model.entity.custom.LoadDistributionByCategories;
+import com.qualle.truegain.repository.ExerciseRepository;
 import com.qualle.truegain.repository.WorkoutCustomRepository;
 import com.qualle.truegain.repository.WorkoutRepository;
-import com.qualle.truegain.service.ExerciseService;
 import com.qualle.truegain.service.WorkoutService;
 import com.qualle.truegain.service.basic.AbstractService;
-import com.qualle.truegain.service.mapper.ExerciseMapper;
 import com.qualle.truegain.service.mapper.GenericMapper;
 import com.qualle.truegain.service.mapper.SimpleWorkoutMapper;
 import com.qualle.truegain.service.mapper.WorkoutMapper;
@@ -36,10 +32,9 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
 
     private final WorkoutRepository repository;
     private final WorkoutCustomRepository customRepository;
+    private final ExerciseRepository exerciseRepository;
     private final WorkoutMapper workoutMapper;
-    private final ExerciseMapper exerciseMapper;
     private final SimpleWorkoutMapper simpleWorkoutMapper;
-    private final ExerciseService exerciseService;
 
     @Override
     protected CrudRepository<Workout, Long> getRepository() {
@@ -79,10 +74,10 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
         LocalDateTime dateStart = localDate.atStartOfDay();
         LocalDateTime dateEnd = LocalDateTime.of(localDate, LocalTime.MAX);
 
-        Workout workout = repository.findByUserIdAndDate(userId, dateStart, dateEnd);
+        List<Workout> workouts = repository.findWithImageByUserIdAndDate(userId, dateStart, dateEnd);
 
-        if (workout != null) {
-            return workoutMapper.toDto(workout, List.of("records"));
+        if (!workouts.isEmpty()) {
+            return workoutMapper.toDto(workouts.get(0), List.of("records"));
         }
 
         Workout newWorkout = Workout.builder()
@@ -128,6 +123,27 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
             result.putIfAbsent(i, 0);
         }
         return result;
+    }
+
+    @Override
+    public MuscleDistributionChartDto getMuscleDistributionChartData(long userId) {
+        LocalDateTime thisMonthEndDate = LocalDateTime.now();
+        LocalDateTime thisMonthStartDate = thisMonthEndDate.minusMonths(1);
+        LocalDateTime lastMonthStartDate = thisMonthStartDate.minusMonths(1);
+
+        List<LoadDistributionByCategories> workoutsThisMonth = repository.findWithCategoryByUserIdAndDate(userId, thisMonthStartDate, thisMonthEndDate);
+        List<LoadDistributionByCategories> workoutsLastMonth = repository.findWithCategoryByUserIdAndDate(userId, lastMonthStartDate, thisMonthStartDate);
+
+        Map<String, Float> thisMonthData = workoutsThisMonth.stream().collect(Collectors
+                .toMap(LoadDistributionByCategories::getName, LoadDistributionByCategories::getLoad));
+
+        Map<String, Float> previousMonthData = workoutsLastMonth.stream().collect(Collectors
+                .toMap(LoadDistributionByCategories::getName, LoadDistributionByCategories::getLoad));
+
+        return MuscleDistributionChartDto.builder()
+                .thisMonthData(thisMonthData)
+                .previousMonthData(previousMonthData)
+                .build();
     }
 
     @Override

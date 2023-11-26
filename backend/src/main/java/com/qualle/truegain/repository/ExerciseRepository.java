@@ -32,4 +32,7 @@ public interface ExerciseRepository extends CrudRepository<Exercise, Long> {
 
     @Query("FROM Exercise e LEFT JOIN FETCH e.image im LEFT JOIN FETCH e.icon ic WHERE e.id = :id")
     Exercise findByIdWithImage(long id);
+
+    @Query("FROM Exercise e LEFT JOIN FETCH e.category c WHERE e.id in :ids")
+    List<Exercise> findByIdsWithCategory(List<Long> ids);
 }

@@ -14,6 +14,6 @@ public class MainPageDataDto {
 
     private Map<Integer, Integer> workoutPerWeekChartData;
     private List<SimpleWorkoutDto> recentWorkouts;
-    private Map<Float, Float> muscleDistributionChartData;
+    private MuscleDistributionChartDto muscleDistributionChartData;
     private List<SimpleExerciseDto> frequentExercises;
 }

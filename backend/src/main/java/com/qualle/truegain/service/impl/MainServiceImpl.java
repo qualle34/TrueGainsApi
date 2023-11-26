@@ -26,7 +26,7 @@ public class MainServiceImpl implements MainService {
                 .workoutPerWeekChartData(workoutService.getCountByUserIdGroupByWeekNumber(userId))
                 .recentWorkouts(workoutService.getRecentByUserIdWithLimit(userId, 2))
                 .frequentExercises(exerciseService.getFrequentlyUsedExercises(userId, 3))
-                .muscleDistributionChartData(null)
+                .muscleDistributionChartData(workoutService.getMuscleDistributionChartData(userId))
                 .build();
     }
 }

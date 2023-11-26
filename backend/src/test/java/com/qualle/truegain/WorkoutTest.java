@@ -96,7 +96,7 @@ public class WorkoutTest {
 
 
         given(workoutRepository.findById(eq(1L))).willReturn(Optional.of(workout));
-        given(workoutRepository.findByUserIdAndDate(eq(1L), any(LocalDateTime.class), any(LocalDateTime.class))).willReturn(workout);
+        given(workoutRepository.findWithImageByUserIdAndDate(eq(1L), any(LocalDateTime.class), any(LocalDateTime.class))).willReturn(List.of(workout));
         given(workoutRepository.findAllByUserId(eq(1L))).willReturn(workouts);
         given(workoutRepository.save(any(Workout.class))).willReturn(workout);
     }

@@ -24,7 +24,7 @@
     <description>Api for TrueGain application</description>
 
     <properties>
-        <revision>0.1.9</revision>
+        <revision>0.1.10</revision>
         <java.version>19</java.version>
     </properties>
 
