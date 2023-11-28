@@ -12,5 +12,5 @@ import java.util.Map;
 public class MuscleDistributionChartDto {
 
     private Map<String, Float> thisMonthData;
-    private Map<String, Float> previousMonthData;
+//    private Map<String, Float> previousMonthData; // todo
 }

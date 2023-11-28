@@ -6,9 +6,9 @@ import jakarta.persistence.Id;
 public interface LoadDistributionByCategories {
 
     @Id
-    long getId();
+    Long getId();
 
     String getName();
 
-    float getLoad();
+    Float getLoad();
 }

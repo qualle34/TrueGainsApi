@@ -79,6 +79,7 @@ public class JwtTokenService implements TokenService {
 
         try {
             Claims payload = Jwts.parser()
+                    .clockSkewSeconds(120)
                     .verifyWith(key).build()
                     .parseSignedClaims(token)
                     .getPayload();

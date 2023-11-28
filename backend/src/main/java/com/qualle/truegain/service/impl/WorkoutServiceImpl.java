@@ -127,22 +127,17 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
 
     @Override
     public MuscleDistributionChartDto getMuscleDistributionChartData(long userId) {
-        LocalDateTime thisMonthEndDate = LocalDateTime.now();
-        LocalDateTime thisMonthStartDate = thisMonthEndDate.minusMonths(1);
-        LocalDateTime lastMonthStartDate = thisMonthStartDate.minusMonths(1);
+        List<LoadDistributionByCategories> workoutsThisMonth = repository.findLoadByCategoryByUserId(userId);
 
-        List<LoadDistributionByCategories> workoutsThisMonth = repository.findWithCategoryByUserIdAndDate(userId, thisMonthStartDate, thisMonthEndDate);
-        List<LoadDistributionByCategories> workoutsLastMonth = repository.findWithCategoryByUserIdAndDate(userId, lastMonthStartDate, thisMonthStartDate);
+        if (workoutsThisMonth == null || workoutsThisMonth.isEmpty()) {
+            return null;
+        }
 
         Map<String, Float> thisMonthData = workoutsThisMonth.stream().collect(Collectors
                 .toMap(LoadDistributionByCategories::getName, LoadDistributionByCategories::getLoad));
 
-        Map<String, Float> previousMonthData = workoutsLastMonth.stream().collect(Collectors
-                .toMap(LoadDistributionByCategories::getName, LoadDistributionByCategories::getLoad));
-
         return MuscleDistributionChartDto.builder()
                 .thisMonthData(thisMonthData)
-                .previousMonthData(previousMonthData)
                 .build();
     }
 
