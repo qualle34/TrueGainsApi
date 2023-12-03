@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegistrationController {
 
     private final RegistrationService registrationService;
-    private final ConfirmationRepository re;
-    private final UserRepository res;
 
     @PostMapping("/registration/new")
     public RefreshTokenAuthenticationDto registerNewUser(@RequestBody NewRegistrationDto dto) {

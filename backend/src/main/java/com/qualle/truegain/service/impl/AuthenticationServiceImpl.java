@@ -85,15 +85,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .refreshExpiredAt(sessionExpired)
                 .build();
 
-
-        String accessToken = tokenService.generateAccess(claims);
-        String refreshToken = tokenService.generateRefresh(claims);
-
         return TokenDto.builder()
-                .accessToken(accessToken)
-                .accessTokenExpiredAt(DateFormatUtil.toString(LocalDateTime.ofInstant(expired.toInstant(), ZoneId.systemDefault())))
-                .refreshToken(refreshToken)
-                .refreshTokenExpiredAt(DateFormatUtil.toString(LocalDateTime.ofInstant(sessionExpired.toInstant(), ZoneId.systemDefault())))
+                .accessToken(tokenService.generateAccess(claims))
+                .refreshToken(tokenService.generateRefresh(claims))
                 .build();
     }
 
@@ -120,14 +114,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         claims.setAccessExpiredAt(expired);
         claims.setRefreshExpiredAt(sessionExpired);
 
-        String accessToken = tokenService.generateAccess(claims);
-        String refreshToken = tokenService.generateRefresh(claims);
-
         return TokenDto.builder()
-                .accessToken(accessToken)
-                .accessTokenExpiredAt(LocalDateTime.ofInstant(expired.toInstant(), ZoneId.systemDefault()).toString())
-                .refreshToken(refreshToken)
-                .refreshTokenExpiredAt(LocalDateTime.ofInstant(sessionExpired.toInstant(), ZoneId.systemDefault()).toString())
+                .accessToken(tokenService.generateAccess(claims))
+                .refreshToken(tokenService.generateRefresh(claims))
                 .build();
     }
 
