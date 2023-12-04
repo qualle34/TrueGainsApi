@@ -1,10 +1,9 @@
 spring:
   datasource:
-    password: 43q21
+    url: jdbc:tc:postgresql:14-alpine:///test_database
     username: qualle
-    url: jdbc:postgresql://localhost:5432/truegain
-  sql:
-    init:
-      mode: always
+    password: 43q21
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: create

@@ -24,4 +24,8 @@ public class Confirmation {
     private LocalDateTime createdAt;
 
     private int fails;
+
+    @MapsId
+    @OneToOne
+    private User user;
 }

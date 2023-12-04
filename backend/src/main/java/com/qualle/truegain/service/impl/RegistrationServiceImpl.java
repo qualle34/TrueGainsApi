@@ -10,6 +10,7 @@ import com.qualle.truegain.model.email.UserEmail;
 import com.qualle.truegain.model.email.VerificationCode;
 import com.qualle.truegain.model.entity.Confirmation;
 import com.qualle.truegain.model.entity.Credentials;
+import com.qualle.truegain.model.entity.Settings;
 import com.qualle.truegain.model.entity.User;
 import com.qualle.truegain.model.exception.BadRequestException;
 import com.qualle.truegain.model.security.TokenClaims;
@@ -19,6 +20,7 @@ import com.qualle.truegain.service.EmailService;
 import com.qualle.truegain.service.RegistrationService;
 import com.qualle.truegain.service.UserService;
 import com.qualle.truegain.service.security.TokenService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final AuthenticationProperties authenticationProperties;
 
     @Override
+    @Transactional
     public RefreshTokenAuthenticationDto register(NewRegistrationDto dto) {
 
         validate(dto);
@@ -59,23 +62,34 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .gender(dto.getGender())
                 .build();
 
+        User savedUser = repository.save(user);
+
         Credentials credentials = Credentials.builder()
+                .userId(savedUser.getId())
                 .role("USER")
                 .email(dto.getEmail())
                 .login(dto.getLogin())
                 .password(passwordEncoder.encode(dto.getPassword()))
+                .user(savedUser)
                 .build();
 
-        user.setCredentials(credentials);
+        Settings settings = Settings.builder()
+                .userId(savedUser.getId())
+                .user(savedUser)
+                .build();
 
         Confirmation confirmation = Confirmation.builder()
+                .userId(savedUser.getId())
                 .createdAt(LocalDateTime.now())
                 .code(verification.getCode())
+                .user(savedUser)
                 .build();
 
-        user.setConfirmation(confirmation);
+        savedUser.setCredentials(credentials);
+        savedUser.setSettings(settings);
+        savedUser.setConfirmation(confirmation);
 
-        User savedUser = repository.save(user);
+        User finaluser = repository.save(user); // todo
 
         String tokenId = UUID.randomUUID().toString();
         Date now = new Date();
@@ -83,7 +97,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         TokenClaims claims = TokenClaims.builder()
                 .tokenId(tokenId)
-                .userId(savedUser.getId())
+                .userId(finaluser.getId())
                 .issuedBy(authenticationProperties.getToken().getIssuedBy())
                 .issuedAt(now)
                 .temporaryExpiredAt(sessionExpired)

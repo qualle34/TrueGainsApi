@@ -18,4 +18,8 @@ public class Settings {
 
     private String language;
     private String units;
+
+    @MapsId
+    @OneToOne
+    private User user;
 }

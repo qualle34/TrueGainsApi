@@ -23,15 +23,15 @@ public class User {
     private boolean enabled;
     private boolean locked;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY,  optional=false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     @PrimaryKeyJoinColumn
     private Credentials credentials;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY,  optional=false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     @PrimaryKeyJoinColumn
     private Confirmation confirmation;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY,  optional=false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     @PrimaryKeyJoinColumn
     private Settings settings;
 

@@ -14,9 +14,13 @@ public class Credentials {
 
     @Id
     @Column(name = "user_id")
-    private long id;
+    private long userId;
     private String login;
     private String email;
     private String role;
     private String password;
+
+    @MapsId
+    @OneToOne
+    private User user;
 }
