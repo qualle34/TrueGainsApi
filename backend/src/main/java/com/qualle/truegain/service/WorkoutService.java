@@ -10,6 +10,8 @@ import java.util.Map;
 
 public interface WorkoutService extends GenericService<WorkoutDto, Long> {
 
+    WorkoutDto getByIdAndUser(long id, long userId);
+
     WorkoutDto getByUserIdAndDate(long userId, String date);
 
     List<SimpleWorkoutDto> getByUserId(long userId);
@@ -19,4 +21,8 @@ public interface WorkoutService extends GenericService<WorkoutDto, Long> {
     Map<Integer, Integer> getCountByUserIdGroupByWeekNumber(long userId);
 
     MuscleDistributionChartDto getMuscleDistributionChartData(long userId);
+
+    void updateWorkoutForUser(WorkoutDto dto, long userId);
+
+    void deleteWorkoutForUser(long id, long userId);
 }

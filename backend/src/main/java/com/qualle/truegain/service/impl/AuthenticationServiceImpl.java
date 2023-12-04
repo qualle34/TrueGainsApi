@@ -38,7 +38,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public TokenDto authenticate(LoginPasswordAuthenticationDto dto) {
-
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getLogin(), dto.getPassword()));
 
         UserDto user = userService.getUserWithCredentialsByLogin(dto.getLogin());

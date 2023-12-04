@@ -1,9 +1,11 @@
 package com.qualle.truegain.service.impl;
 
 import com.qualle.truegain.api.*;
+import com.qualle.truegain.api.support.ErrorType;
 import com.qualle.truegain.model.entity.User;
 import com.qualle.truegain.model.entity.Workout;
 import com.qualle.truegain.model.entity.custom.LoadDistributionByCategories;
+import com.qualle.truegain.model.exception.BadRequestException;
 import com.qualle.truegain.repository.ExerciseRepository;
 import com.qualle.truegain.repository.WorkoutCustomRepository;
 import com.qualle.truegain.repository.WorkoutRepository;
@@ -13,6 +15,7 @@ import com.qualle.truegain.service.mapper.GenericMapper;
 import com.qualle.truegain.service.mapper.SimpleWorkoutMapper;
 import com.qualle.truegain.service.mapper.WorkoutMapper;
 import com.qualle.truegain.service.util.DateFormatUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
@@ -64,6 +67,17 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
 
         volumeForExercises.add(0, new WorkoutVolumeDto("Overall", volumeForExercises.stream().mapToDouble(WorkoutVolumeDto::getValue).sum()));
         dto.setVolumeForExercises(volumeForExercises);
+
+        return dto;
+    }
+
+    @Override
+    public WorkoutDto getByIdAndUser(long id, long userId) {
+        WorkoutDto dto = getById(id);
+
+        if (dto.getUserId() != userId) {
+            throw new BadRequestException("Unable to load workout. Workout id is not valid", ErrorType.BAD_REQUEST);
+        }
 
         return dto;
     }
@@ -142,9 +156,28 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
     }
 
     @Override
-    public void save(WorkoutDto dto) {
-        Workout workout = workoutMapper.fromDto(dto, List.of("records"));
+    @Transactional
+    public void updateWorkoutForUser(WorkoutDto dto, long userId) {
+        Workout workout = repository.findByIdWithRecords(dto.getId());
 
-        repository.save(workout);
+        if (workout.getUser().getId() != userId) {
+            throw new BadRequestException("Unable to update workout. Workout id is not valid", ErrorType.BAD_REQUEST);
+        }
+
+        Workout newWorkout = workoutMapper.fromDto(dto, List.of("records"));
+
+        repository.save(newWorkout);
+    }
+
+    @Override
+    @Transactional
+    public void deleteWorkoutForUser(long id, long userId) {
+        Workout workout = repository.findByIdWithRecords(id);
+
+        if (workout.getUser().getId() != userId) {
+            throw new BadRequestException("Unable to delete workout. Workout id is not valid", ErrorType.BAD_REQUEST);
+        }
+
+        repository.delete(workout);
     }
 }

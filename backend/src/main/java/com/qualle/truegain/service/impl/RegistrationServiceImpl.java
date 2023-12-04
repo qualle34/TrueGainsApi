@@ -60,7 +60,6 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .build();
 
         Credentials credentials = Credentials.builder()
-                .user(user)
                 .role("USER")
                 .email(dto.getEmail())
                 .login(dto.getLogin())
@@ -72,7 +71,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         Confirmation confirmation = Confirmation.builder()
                 .createdAt(LocalDateTime.now())
                 .code(verification.getCode())
-                .user(user)
                 .build();
 
         user.setConfirmation(confirmation);

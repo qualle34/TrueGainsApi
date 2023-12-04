@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 public class Confirmation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private long userId;
 
@@ -25,8 +24,4 @@ public class Confirmation {
     private LocalDateTime createdAt;
 
     private int fails;
-
-    @MapsId
-    @OneToOne
-    private User user;
 }

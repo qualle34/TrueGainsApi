@@ -38,8 +38,7 @@ public class WorkoutController {
             throw new BadRequestException();
         }
 
-        // todo check user
-        return workoutService.getById(id);
+        return workoutService.getByIdAndUser(id, user.getId());
     }
 
     @GetMapping("/private/workout/simple")
@@ -57,14 +56,18 @@ public class WorkoutController {
         return workoutService.getByUserIdAndDate(user.getId(), date);
     }
 
-    @PostMapping("/private/workout")
-    public void saveWorkout(@AuthenticationPrincipal TokenSecurityDetails user, @RequestBody @Validated WorkoutDto dto) {
+    @PutMapping("/private/workout/{id}")
+    public void saveWorkout(@AuthenticationPrincipal TokenSecurityDetails user, @PathVariable Long id, @RequestBody @Validated WorkoutDto dto) {
 
         if (dto == null) {
             throw new BadRequestException();
         }
 
-        workoutService.save(dto);
+        if (dto.getId() == 0) {
+            dto.setId(id);
+        }
+
+        workoutService.updateWorkoutForUser(dto, user.getId());
     }
 
     @DeleteMapping("/private/workout/{id}")
@@ -74,6 +77,6 @@ public class WorkoutController {
             throw new BadRequestException();
         }
 
-        workoutService.delete(id);
+        workoutService.deleteWorkoutForUser(id, user.getId());
     }
 }

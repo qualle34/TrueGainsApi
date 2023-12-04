@@ -33,6 +33,7 @@ public class UserServiceImpl extends AbstractService<User, UserDto, Long> implem
     private final UserMapper mapper;
 
     @Override
+    @Transactional
     public UserDto getUserWithCredentialsByLogin(String login) {
         User user = repository.findUserWithCredentials(login);
 
@@ -43,7 +44,7 @@ public class UserServiceImpl extends AbstractService<User, UserDto, Long> implem
     public UserDto getUserWithCredentialsById(long id) {
         User user = repository.findUserWithCredentials(id);
 
-        return mapper.toDto(user, List.of("credentials"));
+        return mapper.toDto(user, List.of("image", "credentials"));
     }
 
     @Override
@@ -76,6 +77,21 @@ public class UserServiceImpl extends AbstractService<User, UserDto, Long> implem
         user.setConfirmation(null);
         user.setEnabled(true);
         repository.save(user);
+    }
+
+    @Override
+    public void save(UserDto dto, Long id) {
+        User user = repository.findUserWithCredentials(id);
+
+        if (user == null || user.getId() != id) {
+            throw new BadRequestException("Unable to update user. User id is not valid", ErrorType.BAD_REQUEST);
+        }
+
+        User newUser = mapper.fromDto(dto);
+        newUser.setId(id);
+        newUser.setImage(user.getImage());
+
+        repository.save(newUser);
     }
 
     @Override

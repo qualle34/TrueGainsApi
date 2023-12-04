@@ -14,4 +14,5 @@ public interface UserService extends GenericService<UserDto, Long>, UserDetailsS
 
     void verifyUser(long userId, int code);
 
+    void save(UserDto dto, Long id);
 }

@@ -19,9 +19,4 @@ public class Credentials {
     private String email;
     private String role;
     private String password;
-
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }

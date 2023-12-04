@@ -2,6 +2,7 @@ package com.qualle.truegain.repository;
 
 import com.qualle.truegain.model.entity.Workout;
 import com.qualle.truegain.model.entity.custom.LoadDistributionByCategories;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -13,10 +14,10 @@ import java.util.Map;
 @Repository
 public interface WorkoutRepository extends CrudRepository<Workout, Long> {
 
-    @Query("FROM Workout w INNER JOIN FETCH w.user u INNER JOIN FETCH w.records r LEFT JOIN FETCH r.exercise e LEFT JOIN FETCH e.image WHERE w.id = :id")
+    @Query("FROM Workout w LEFT JOIN FETCH w.records r LEFT JOIN FETCH r.exercise e LEFT JOIN FETCH e.image WHERE w.id = :id")
     Workout findByIdWithRecords(long id);
 
-    @Query("FROM Workout w INNER JOIN FETCH w.user u INNER JOIN FETCH w.records r LEFT JOIN FETCH r.exercise e LEFT JOIN FETCH e.image WHERE u.id = :userId AND w.date BETWEEN :dateStart AND :dateEnd ")
+    @Query("FROM Workout w INNER JOIN FETCH w.records r LEFT JOIN FETCH r.exercise e INNER JOIN FETCH e.image i WHERE w.user.id = :userId AND w.date BETWEEN :dateStart AND :dateEnd ")
     List<Workout> findWithImageByUserIdAndDate(long userId, LocalDateTime dateStart, LocalDateTime dateEnd);
 
     @Query(nativeQuery = true, value = "SELECT c.name AS name, c.id, sum(r.reps * r.weight) AS load FROM workout w LEFT JOIN record r ON w.id = r.workout_id LEFT JOIN exercise e ON r.exercise_id = e.id LEFT JOIN category c ON e.category_id = c.id WHERE w.user_id = :userId GROUP BY c.id HAVING c.id is not null")

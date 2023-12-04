@@ -12,10 +12,10 @@ import java.util.List;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    @Query("FROM User u LEFT JOIN FETCH u.credentials c WHERE c.login LIKE :login")
+    @Query("SELECT u FROM User u INNER JOIN FETCH u.credentials c WHERE c.login LIKE :login")
     User findUserWithCredentials(String login);
 
-    @Query("FROM User u LEFT JOIN FETCH u.credentials c WHERE u.id = :id")
+    @Query("SELECT u FROM User u INNER JOIN FETCH u.credentials c LEFT JOIN FETCH u.image i WHERE u.id = :id")
     User findUserWithCredentials(long id);
 
     @Query("FROM User u LEFT JOIN FETCH u.confirmation c WHERE u.id = :id")
