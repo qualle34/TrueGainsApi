@@ -30,6 +30,7 @@
     </root>
 
     <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="org.zalando.logbook" level="DEBUG"/>
 
 <!--  <logger name="org.springframework" level="trace" additivity="false">-->
 <!--&lt;!&ndash;        <appender-ref ref="RollingFile" />&ndash;&gt;-->
