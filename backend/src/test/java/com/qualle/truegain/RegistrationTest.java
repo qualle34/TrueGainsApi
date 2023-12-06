@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qualle.truegain.api.ConfirmRegistrationDto;
 import com.qualle.truegain.api.NewRegistrationDto;
 import com.qualle.truegain.api.TemporaryTokenDto;
-import com.qualle.truegain.api.TokenDto;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,18 +19,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.Is.isA;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Testcontainers
-@RunWith(SpringRunner.class)
-@ActiveProfiles("test")
+@ActiveProfiles("test-containers-flyway")
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
@@ -37,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestPropertySource(
         locations = "classpath:application-test.yml")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RegistrationTest {
 
     @Autowired
@@ -45,14 +43,9 @@ public class RegistrationTest {
     @Autowired
     private ObjectMapper mapper;
 
-    @BeforeAll
-    public void before() {
-
-
-    }
-
     @Test
-    public void getWorkoutByIdWhenCorrectDataThenSuccess() throws Exception {
+    @Order(1)
+    public void registerNewUserWhenCorrectDataThenSuccess() throws Exception {
 
         var registration = NewRegistrationDto.builder()
                 .name("User")
@@ -67,7 +60,7 @@ public class RegistrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect((ResultMatcher) isA(TemporaryTokenDto.class))
+                .andExpect(jsonPath("$.token", any(String.class)))
                 .andReturn().getResponse();
 
         TemporaryTokenDto token = mapper.readValue(response.getContentAsString(), TemporaryTokenDto.class);
@@ -83,6 +76,106 @@ public class RegistrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect((ResultMatcher) isA(TokenDto.class));
+                .andExpect(jsonPath("$.accessToken", any(String.class)))
+                .andExpect(jsonPath("$.refreshToken", any(String.class)));
+    }
+
+    @Test
+    @Order(2)
+    public void registerNewUserWhenLoginExistedInDbThenFail() throws Exception {
+
+        var registration = NewRegistrationDto.builder()
+                .name("User")
+                .login("testuser")
+                .email("test@gmail.com")
+                .password("testuser")
+                .build();
+
+        mvc.perform(post("/registration/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(registration)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.type", any(String.class)));
+
+    }
+
+    @Test
+    @Order(3)
+    public void registerNewUserWhenEmailExistedInDbThenFail() throws Exception {
+
+        var registration = NewRegistrationDto.builder()
+                .name("User")
+                .login("test")
+                .email("testuser@gmail.com")
+                .password("testuser")
+                .build();
+
+        mvc.perform(post("/registration/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(registration)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.type", any(String.class)));
+
+    }
+
+    @Test
+    @Order(4)
+    public void registerNewUserWhenPasswordIsWeekThenFail() throws Exception {
+
+        var registration = NewRegistrationDto.builder()
+                .name("User")
+                .login("newtestuser")
+                .email("newtestuser@gmail.com")
+                .password("a")
+                .build();
+
+        mvc.perform(post("/registration/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(registration)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.type", any(String.class)));
+
+    }
+
+    @Test
+    @Order(5)
+    public void registerNewUserWhenConfirmationCodeIsNotValidThenFail() throws Exception {
+
+        var registration = NewRegistrationDto.builder()
+                .name("User")
+                .login("newtestuser")
+                .email("newtestuser@gmail.com")
+                .password("newtestuser")
+                .build();
+
+        var response = mvc.perform(post("/registration/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(registration)))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.token", any(String.class)))
+                .andReturn().getResponse();
+
+        TemporaryTokenDto token = mapper.readValue(response.getContentAsString(), TemporaryTokenDto.class);
+
+        var confirmation = ConfirmRegistrationDto.builder()
+                .token(token.getToken())
+                .code(222222)
+                .build();
+
+        mvc.perform(post("/registration/confirm")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(confirmation)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.type", any(String.class)));
     }
 }

@@ -1,9 +1,11 @@
 spring:
   datasource:
     url: jdbc:tc:postgresql:14-alpine:///test_database
-    username: qualle
-    password: 43q21
+    username: user
+    password: password
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: create
+  flyway:
+    enabled: false

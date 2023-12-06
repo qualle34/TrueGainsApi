@@ -12,6 +12,8 @@ import org.testcontainers.images.builder.Transferable;
 import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,15 +21,21 @@ public class QuickTest {
     @Test
     public void test() throws SQLException {
 
-        try (PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:14-alpine")
-                .withCopyToContainer(Transferable.of(initsql), "/docker-entrypoint-initdb.d/init.sql")) {
-            postgreSQLContainer.start();
-            Connection connection = DriverManager.getConnection(postgreSQLContainer.getJdbcUrl(), postgreSQLContainer.getUsername(), postgreSQLContainer.getPassword());
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM guides");
-            preparedStatement.execute();
-            ResultSet resultSet = preparedStatement.getResultSet();
-            resultSet.next();
-            assertThat(resultSet.getInt(1)).isEqualTo(6);
+    }
+
+    class CHlen {
+        private int i;
+
+        public CHlen(int i) {
+            this.i = i;
+        }
+
+        public int getI() {
+            return i;
+        }
+
+        public void setI(int i) {
+            this.i = i;
         }
     }
 

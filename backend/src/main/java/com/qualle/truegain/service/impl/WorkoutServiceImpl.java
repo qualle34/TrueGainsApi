@@ -4,11 +4,13 @@ import com.qualle.truegain.api.*;
 import com.qualle.truegain.api.support.ErrorType;
 import com.qualle.truegain.model.entity.User;
 import com.qualle.truegain.model.entity.Workout;
+import com.qualle.truegain.model.entity.Workout_;
 import com.qualle.truegain.model.entity.custom.LoadDistributionByCategories;
 import com.qualle.truegain.model.exception.BadRequestException;
 import com.qualle.truegain.repository.ExerciseRepository;
-import com.qualle.truegain.repository.WorkoutCustomRepository;
 import com.qualle.truegain.repository.WorkoutRepository;
+import com.qualle.truegain.repository.WorkoutSpecificationsRepository;
+import com.qualle.truegain.repository.specifications.WorkoutSpecifications;
 import com.qualle.truegain.service.WorkoutService;
 import com.qualle.truegain.service.basic.AbstractService;
 import com.qualle.truegain.service.mapper.GenericMapper;
@@ -17,16 +19,16 @@ import com.qualle.truegain.service.mapper.WorkoutMapper;
 import com.qualle.truegain.service.util.DateFormatUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,8 +36,7 @@ import java.util.stream.Collectors;
 public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Long> implements WorkoutService {
 
     private final WorkoutRepository repository;
-    private final WorkoutCustomRepository customRepository;
-    private final ExerciseRepository exerciseRepository;
+    private final WorkoutSpecificationsRepository specificationsRepository;
     private final WorkoutMapper workoutMapper;
     private final SimpleWorkoutMapper simpleWorkoutMapper;
 
@@ -88,7 +89,9 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
         LocalDateTime dateStart = localDate.atStartOfDay();
         LocalDateTime dateEnd = LocalDateTime.of(localDate, LocalTime.MAX);
 
-        List<Workout> workouts = repository.findWithImageByUserIdAndDate(userId, dateStart, dateEnd);
+        List<Workout> workouts = specificationsRepository
+                .findAll(WorkoutSpecifications.hasUserId(userId)
+                        .and(WorkoutSpecifications.isBetweenDates(dateStart, dateEnd)));
 
         if (!workouts.isEmpty()) {
             return workoutMapper.toDto(workouts.get(0), List.of("records"));
@@ -116,7 +119,10 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
 
     @Override
     public List<SimpleWorkoutDto> getRecentByUserIdWithLimit(long userId, int count) {
-        List<Workout> workouts = customRepository.findRecentByUserIdWithLimit(userId, count);
+
+        Pageable pageable = PageRequest.of(0, count, Sort.by(Sort.Direction.DESC, Workout_.DATE));
+
+        List<Workout> workouts = specificationsRepository.findAll(WorkoutSpecifications.hasUserId(userId), pageable).toList();
 
         List<SimpleWorkoutDto> dtos = simpleWorkoutMapper.toDto(workouts);
 

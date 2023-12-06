@@ -56,40 +56,38 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .build();
         VerificationCode verification = emailService.sendVerificationLetter(email);
 
-        User user = User.builder()
+        User user = repository.save(User.builder()
                 .name(dto.getName())
                 .birthday(dto.getBirthday())
                 .gender(dto.getGender())
-                .build();
-
-        User savedUser = repository.save(user);
+                .build());
 
         Credentials credentials = Credentials.builder()
-                .userId(savedUser.getId())
+                .userId(user.getId())
                 .role("USER")
                 .email(dto.getEmail())
                 .login(dto.getLogin())
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .user(savedUser)
+                .user(user)
                 .build();
 
         Settings settings = Settings.builder()
-                .userId(savedUser.getId())
-                .user(savedUser)
+                .userId(user.getId())
+                .user(user)
                 .build();
 
         Confirmation confirmation = Confirmation.builder()
-                .userId(savedUser.getId())
+                .userId(user.getId())
                 .createdAt(LocalDateTime.now())
                 .code(verification.getCode())
-                .user(savedUser)
+                .user(user)
                 .build();
 
-        savedUser.setCredentials(credentials);
-        savedUser.setSettings(settings);
-        savedUser.setConfirmation(confirmation);
+        user.setCredentials(credentials);
+        user.setSettings(settings);
+        user.setConfirmation(confirmation);
 
-        User finaluser = repository.save(user); // todo
+        User finalUser = repository.save(user);
 
         String tokenId = UUID.randomUUID().toString();
         Date now = new Date();
@@ -97,7 +95,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         TokenClaims claims = TokenClaims.builder()
                 .tokenId(tokenId)
-                .userId(finaluser.getId())
+                .userId(finalUser.getId())
                 .issuedBy(authenticationProperties.getToken().getIssuedBy())
                 .issuedAt(now)
                 .temporaryExpiredAt(sessionExpired)
