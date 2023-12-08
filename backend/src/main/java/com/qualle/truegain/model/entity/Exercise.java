@@ -23,10 +23,10 @@ public class Exercise {
     private String description;
     private String technique;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Image image;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Image icon;
 
     @ManyToOne(fetch = FetchType.LAZY)
