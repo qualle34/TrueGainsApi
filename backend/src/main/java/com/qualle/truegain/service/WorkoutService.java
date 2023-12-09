@@ -22,7 +22,12 @@ public interface WorkoutService extends GenericService<WorkoutDto, Long> {
 
     MuscleDistributionChartDto getMuscleDistributionChartData(long userId);
 
+    int getWorkoutCountByUserId(long userId);
+
+    float getTotalLoadByUserId(Long id);
+
     void updateWorkoutForUser(WorkoutDto dto, long userId);
 
     void deleteWorkoutForUser(long id, long userId);
+
 }

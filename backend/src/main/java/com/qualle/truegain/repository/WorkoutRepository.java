@@ -2,6 +2,7 @@ package com.qualle.truegain.repository;
 
 import com.qualle.truegain.model.entity.Workout;
 import com.qualle.truegain.model.entity.custom.LoadDistributionByCategories;
+import com.qualle.truegain.model.entity.custom.TotalLoad;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -17,6 +18,11 @@ public interface WorkoutRepository extends CrudRepository<Workout, Long> {
     @Query("FROM Workout w LEFT JOIN FETCH w.records r LEFT JOIN FETCH r.exercise e LEFT JOIN FETCH e.image WHERE w.id = :id")
     Workout findByIdWithRecords(long id);
 
+    int countByUserId(long id);
+
+    @Query(nativeQuery = true, value = "SELECT w.user_id, sum(weight * reps) AS load FROM workout w LEFT JOIN record r on w.id = r.workout_id WHERE user_id = :id group by w.user_id;")
+    TotalLoad findTotalLoadByUserId(Long id);
+
     @Query("FROM Workout w INNER JOIN FETCH w.records r LEFT JOIN FETCH r.exercise e INNER JOIN FETCH e.image i WHERE w.user.id = :userId AND w.date BETWEEN :dateStart AND :dateEnd ")
     List<Workout> findWithImageByUserIdAndDate(long userId, LocalDateTime dateStart, LocalDateTime dateEnd);
 
@@ -28,4 +34,6 @@ public interface WorkoutRepository extends CrudRepository<Workout, Long> {
 
     @Query(nativeQuery = true, value = "SELECT DATE_PART('week', workout.date) AS week, COUNT(id) FROM workout WHERE workout.user_id = :userId AND workout.date > workout.date  - interval '1 year' GROUP BY week ORDER BY week;")
     List<Map<String, Number>> findWorkoutCountByUserIdGroupByWeekNumber(long userId);
+
+
 }

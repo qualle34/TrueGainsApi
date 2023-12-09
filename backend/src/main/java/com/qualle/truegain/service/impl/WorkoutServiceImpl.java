@@ -162,6 +162,16 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
     }
 
     @Override
+    public int getWorkoutCountByUserId(long userId) {
+        return repository.countByUserId(userId);
+    }
+
+    @Override
+    public float getTotalLoadByUserId(Long id) {
+        return repository.findTotalLoadByUserId(id).getLoad();
+    }
+
+    @Override
     @Transactional
     public void updateWorkoutForUser(WorkoutDto dto, long userId) {
         Workout workout = repository.findByIdWithRecords(dto.getId());

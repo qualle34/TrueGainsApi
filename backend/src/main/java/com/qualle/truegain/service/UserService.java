@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService extends GenericService<UserDto, Long>, UserDetailsService {
 
+    ProfileDto getProfileById(Long id);
     UserDto getUserWithCredentialsByLogin(String login);
 
     UserDto getUserWithCredentialsById(long id);
@@ -15,4 +16,5 @@ public interface UserService extends GenericService<UserDto, Long>, UserDetailsS
     void verifyUser(long userId, int code);
 
     void save(UserDto dto, Long id);
+
 }

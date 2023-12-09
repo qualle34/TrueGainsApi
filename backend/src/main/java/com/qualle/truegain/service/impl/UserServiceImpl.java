@@ -1,5 +1,6 @@
 package com.qualle.truegain.service.impl;
 
+import com.qualle.truegain.api.ProfileDto;
 import com.qualle.truegain.api.UserDto;
 import com.qualle.truegain.api.support.ErrorType;
 import com.qualle.truegain.model.entity.Confirmation;
@@ -10,6 +11,7 @@ import com.qualle.truegain.model.security.UserSecurityDetails;
 import com.qualle.truegain.repository.ConfirmationRepository;
 import com.qualle.truegain.repository.UserRepository;
 import com.qualle.truegain.service.UserService;
+import com.qualle.truegain.service.WorkoutService;
 import com.qualle.truegain.service.basic.AbstractService;
 import com.qualle.truegain.service.mapper.GenericMapper;
 import com.qualle.truegain.service.mapper.UserMapper;
@@ -29,8 +31,19 @@ import java.util.Objects;
 public class UserServiceImpl extends AbstractService<User, UserDto, Long> implements UserService {
 
     private final UserRepository repository;
+    private final WorkoutService workoutService;
     private final ConfirmationRepository confirmationRepository;
     private final UserMapper mapper;
+
+    @Override
+    public ProfileDto getProfileById(Long id) {
+
+        return ProfileDto.builder()
+                .workoutsCount(workoutService.getWorkoutCountByUserId(id))
+                .totalLoad(workoutService.getTotalLoadByUserId(id))
+                .user(getUserWithCredentialsById(id))
+                .build();
+    }
 
     @Override
     @Transactional
