@@ -3,6 +3,10 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "master" ]
+
+env:
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
