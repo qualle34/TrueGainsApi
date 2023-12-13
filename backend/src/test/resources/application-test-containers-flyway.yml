@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:14-alpine:///test_database
+    username: user
+    password: password

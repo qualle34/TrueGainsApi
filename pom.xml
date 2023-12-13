@@ -16,7 +16,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.truegain</groupId>
+    <groupId>com.qualle.truegain</groupId>
     <artifactId>truegain-api</artifactId>
     <version>${revision}</version>
 
@@ -24,19 +24,19 @@
     <description>Api for TrueGain application</description>
 
     <properties>
-        <revision>0.1.6</revision>
+        <revision>0.1.11</revision>
         <java.version>19</java.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.truegain</groupId>
+                <groupId>com.qualle.truegain</groupId>
                 <artifactId>api</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>com.truegain</groupId>
+                <groupId>com.qualle.truegain</groupId>
                 <artifactId>backend</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -52,6 +52,15 @@
                 <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
                 <version>2.2.0</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>1.19.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

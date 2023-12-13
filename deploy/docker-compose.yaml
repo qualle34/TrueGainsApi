@@ -3,7 +3,11 @@ version: '3.1'
 services:
 
   truegain-api:
-    image: truegain-api
+    image: "qualle34/truegain-api:v0.1.6"
+    environment:
+      TRUEGAIN_DB_URL: "jdbc:postgresql://172.20.0.3:5432/truegain"
+      TRUEGAIN_DB_USERNAME: "qualle"
+      TRUEGAIN_DB_PASSWORD: "43q21"
     networks:
       - truegain-net
     ports:
@@ -14,7 +18,7 @@ services:
     networks:
       - truegain-net
     environment:
-      POSTGRES_DB: "shapeup"
+      POSTGRES_DB: "truegain"
       POSTGRES_USER: "qualle"
       POSTGRES_PASSWORD: "43q21"
     ports:
