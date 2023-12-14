@@ -2,6 +2,9 @@ package com.qualle.truegain.api;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.Map;
+
 @Getter
 @Setter
 @Builder
@@ -9,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 public class UserMeasureDto {
 
-    private long id;
-    private String name;
+    private long measureId;
+    private LocalDateTime date;
+    private float value;
 }

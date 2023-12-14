@@ -19,7 +19,8 @@ public class UserDimension {
     private long id;
 
     private OffsetDateTime date;
-    private String value;
+
+    private float value;
 
     @ManyToOne
     private Dimension dimension;
