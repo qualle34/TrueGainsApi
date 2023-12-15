@@ -1,7 +1,8 @@
 package com.qualle.truegain.config;
 
 import com.qualle.truegain.service.UserService;
-import com.qualle.truegain.web.filter.TokenFilter;
+import com.qualle.truegain.service.security.TokenAuthenticationManager;
+import com.qualle.truegain.web.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,10 +24,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final TokenFilter tokenFilter;
+    private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
     private final UserService userService;
-
 
     @Autowired
     @Qualifier("delegatedAuthenticationEntryPoint")
@@ -35,11 +35,6 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -65,7 +60,7 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .authenticationEntryPoint(authEntryPoint)
                 .and()
-                .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
