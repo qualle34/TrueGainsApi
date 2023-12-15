@@ -11,5 +11,5 @@ public interface MeasureService {
 
     MeasureDto getMeasureById(long id, long userId);
 
-    void addMeasureById(UserMeasureDto dto, long userId);
+    void addMeasure(UserMeasureDto dto, Long id);
 }

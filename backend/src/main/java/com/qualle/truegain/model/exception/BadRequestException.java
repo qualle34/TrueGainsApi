@@ -10,6 +10,10 @@ public class BadRequestException extends GenericApplicationException {
         super(null, null);
     }
 
+    public BadRequestException(String message) {
+        super(message, ErrorType.BAD_REQUEST, null);
+    }
+
     public BadRequestException(ErrorType errorType) {
         super(errorType, null);
     }

@@ -22,7 +22,7 @@ public class DimensionMapperImpl implements DimensionMapper {
         if (params.contains("user_measures") &&  dimension.getUserDimensions() != null) {
 
             dimension.getUserDimensions().forEach( d -> {
-                        float dayNum = (float) d.getDate().toInstant().getEpochSecond() / 86400;
+                        float dayNum = (float) d.getDate().toInstant(ZoneOffset.UTC).getEpochSecond() / 86400;
                         data.put(dayNum, d.getValue());
                     }
             );

@@ -2,6 +2,7 @@ package com.qualle.truegain.repository;
 
 import com.qualle.truegain.model.entity.Confirmation;
 import com.qualle.truegain.model.entity.Dimension;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
