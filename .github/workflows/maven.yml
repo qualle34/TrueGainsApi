@@ -21,7 +21,7 @@ jobs:
           distribution: 'temurin'
           architecture: x64
       - name: Run the Maven deploy phase
-        run: mvn --batch-mode --update-snapshots verify
+        run: mvn --batch-mode --update-snapshots deploy
   deploy:
     name: Deploy
     needs: build
