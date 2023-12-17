@@ -141,7 +141,6 @@
         <finalName>truegain-api-v${revision}</finalName>
         <plugins>
 
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -159,28 +158,6 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.12</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <dockerfile>Dockerfile</dockerfile>
-                    <username>qualle34</username>
-                    <password>${env.DOCKER_TOKEN}</password>
-                    <repository>qualle34/truegain-api</repository>
-                    <tag>latest</tag>
                 </configuration>
             </plugin>
 
