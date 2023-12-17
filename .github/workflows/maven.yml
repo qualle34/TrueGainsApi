@@ -21,7 +21,14 @@ jobs:
           distribution: 'temurin'
           architecture: x64
       - name: Run the Maven deploy phase
-        run: mvn --batch-mode --update-snapshots deploy
+        run: mvn --batch-mode --update-snapshots install
+      - name: Build Docker image
+        run: docker build -t qualle34/truegain-api:latest -f backend/Dockerfile backend
+      - name: Log in to Docker Hub
+        run: echo "${DOCKER_TOKEN}" | docker login --username qualle34 --password-stdin
+      - name: Push Docker image to Docker Hub
+        run: docker push qualle34/truegain-api:latest
+        
   deploy:
     name: Deploy
     needs: build
