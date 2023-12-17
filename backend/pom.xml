@@ -180,7 +180,7 @@
                     <username>qualle34</username>
                     <password>${env.DOCKER_TOKEN}</password>
                     <repository>qualle34/truegain-api</repository>
-                    <tag>v${revision}</tag>
+                    <tag>latest</tag>
                 </configuration>
             </plugin>
 
