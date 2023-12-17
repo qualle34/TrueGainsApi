@@ -33,8 +33,18 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
 
@@ -170,7 +180,7 @@
                     <username>qualle34</username>
                     <password>${env.DOCKER_TOKEN}</password>
                     <repository>qualle34/truegain-api</repository>
-                    <tag>v${revision}</tag>
+                    <tag>latest</tag>
                 </configuration>
             </plugin>
 

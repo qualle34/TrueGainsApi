@@ -3,6 +3,7 @@ package com.qualle.truegain.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -18,8 +19,9 @@ public class UserDimension {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private OffsetDateTime date;
-    private String value;
+    private LocalDateTime date;
+
+    private float value;
 
     @ManyToOne
     private Dimension dimension;

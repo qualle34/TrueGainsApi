@@ -229,7 +229,6 @@ INSERT INTO "image"(link) values('exercises/calves/image_calf_press_on_the_leg_p
 INSERT INTO "image"(link) values('exercises/calves/image_smith_machine_calf_raises.png');
 INSERT INTO "image"(link) values('exercises/calves/image_standing_calf_raises.png');
 
-
 INSERT INTO "category"(name, image_id) values('Chest', 1);
 INSERT INTO "category"(name, image_id) values('Back', 2);
 INSERT INTO "category"(name, image_id) values('Biceps', 3);
@@ -242,14 +241,6 @@ INSERT INTO "category"(name, image_id) values('Quads', 9);
 INSERT INTO "category"(name, image_id) values('Hamstrings', 10);
 INSERT INTO "category"(name, image_id) values('Glutes', 11);
 INSERT INTO "category"(name, image_id) values('Calves', 12);
-
-INSERT INTO "dimension"(name) values('Руки');
-INSERT INTO "dimension"(name) values('Предплечья');
-INSERT INTO "dimension"(name) values('Шея');
-INSERT INTO "dimension"(name) values('Грудь');
-INSERT INTO "dimension"(name) values('Талия');
-INSERT INTO "dimension"(name) values('Бедра');
-INSERT INTO "dimension"(name) values('Икры');
 
 INSERT INTO "exercise"(category_id, icon_id, image_id, name, equipment, description, technique) values(1,  13,  123, 'Bench Press', 'Barbell', 'The bench press is a basic exercise with free weights. The exercise is performed with a barbell on a bench.',  '1. Lay flat on the bench with your feet on the ground. With straight arms unrack the bar.\n 2. Lower the bar to your mid chest\n 3. Raise the bar until you locked your elbows');
 INSERT INTO "exercise"(category_id, icon_id, image_id, name, equipment, description, technique) values(1,  14,  124, 'Incline Bench Press', 'Barbell', 'The incline bench press is a variation of the bench press. Using an incline will allow you to better target your upper chest, a lagging area for many lifters. The exercise is performed with a barbell on a bench with an incline of 30°.', '1. Position the bench between 30 and 45 degrees.\n2. Lay flat on the bench with your feet on the ground. With straight arms unrack the bar.\n3. Lower the bar to your mid chest \n4. Raise the bar (slowly and controlled) until you locked your elbows.');

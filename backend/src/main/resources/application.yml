@@ -40,4 +40,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: httptrace,health,info,beans
+        include: httptrace,health,info,prometheus

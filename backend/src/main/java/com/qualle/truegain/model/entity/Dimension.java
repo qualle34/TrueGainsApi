@@ -20,6 +20,6 @@ public class Dimension {
 
     private String name;
 
-    @OneToMany(mappedBy = "dimension", cascade = CascadeType.ALL)
-    private List<UserDimension> users;
+    @OneToMany(mappedBy = "dimension", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserDimension> userDimensions;
 }
