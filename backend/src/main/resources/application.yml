@@ -18,6 +18,15 @@ spring:
       mode: always
   jpa:
     show-sql: true
+  kafka:
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+  rabbitmq:
+    password: password
+    username: user
 
 authentication:
   token:
