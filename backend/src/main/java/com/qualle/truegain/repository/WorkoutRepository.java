@@ -3,16 +3,13 @@ package com.qualle.truegain.repository;
 import com.qualle.truegain.model.entity.Workout;
 import com.qualle.truegain.model.entity.custom.LoadDistributionByCategories;
 import com.qualle.truegain.model.entity.custom.TotalLoad;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-@Repository
 public interface WorkoutRepository extends CrudRepository<Workout, Long> {
 
     @Query("FROM Workout w LEFT JOIN FETCH w.records r LEFT JOIN FETCH r.exercise e LEFT JOIN FETCH e.image WHERE w.id = :id")

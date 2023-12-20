@@ -1,18 +1,12 @@
 package com.qualle.truegain.repository;
 
 import com.qualle.truegain.model.entity.Exercise;
-import com.qualle.truegain.model.entity.User;
-import com.qualle.truegain.model.entity.Record;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-@Repository
 public interface ExerciseRepository extends CrudRepository<Exercise, Long> {
 
     @Query("FROM Exercise e JOIN FETCH e.records r JOIN FETCH r.workout w WHERE w.id = :id")
