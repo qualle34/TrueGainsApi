@@ -4,9 +4,9 @@ spring:
   application:
     name: truegain-api
   datasource:
-    password:  ${TRUEGAIN_DB_PASSWORD:43q21}
-    username:  ${TRUEGAIN_DB_USERNAME:qualle}
-    url:  ${TRUEGAIN_DB_URL:jdbc:postgresql://localhost:5432/truegain}
+    password: ${TRUEGAIN_DB_PASSWORD:43q21}
+    username: ${TRUEGAIN_DB_USERNAME:qualle}
+    url: ${TRUEGAIN_DB_URL:jdbc:postgresql://localhost:5432/truegain}
     hikari:
       connection-timeout: 10000
       validation-timeout: 2000
@@ -18,6 +18,20 @@ spring:
       mode: always
   jpa:
     show-sql: true
+    properties:
+      hibernate:
+        cache:
+          use-second-level-cache: true
+          use-query-cache: true
+        region:
+          factory-class: jcache
+    hibernate:
+      javax:
+        cache:
+          provider: org.ehcache.jsr107.EhcacheCachingProvider
+
+
+
 
 authentication:
   token:
