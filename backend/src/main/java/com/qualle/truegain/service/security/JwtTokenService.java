@@ -88,6 +88,7 @@ public class JwtTokenService implements TokenService {
                     .tokenId(payload.getId())
                     .issuedAt(payload.getIssuedAt())
                     .issuedBy(payload.getIssuer())
+                    .type((String) payload.get("type"))
                     .userId(payload.get("uid", Long.class));
 
             switch (payload.get("type").toString()) {
