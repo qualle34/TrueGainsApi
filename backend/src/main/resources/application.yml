@@ -18,6 +18,25 @@ spring:
       mode: always
   jpa:
     show-sql: true
+    properties:
+      hibernate:
+        cache:
+          use-second-level-cache: true
+          use-query-cache: true
+        region:
+          factory-class: jcache
+    hibernate:
+      javax:
+        cache:
+          provider: org.ehcache.jsr107.EhcacheCachingProvider
+  cassandra:
+    schema-action: CREATE_IF_NOT_EXISTS
+    request.timeout: 10s
+    connection:
+      connect-timeout: 10s
+      init-query-timeout: 10s
+    local-datacenter: datacenter1
+    keyspace-name: spring_cassandra
   kafka:
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
