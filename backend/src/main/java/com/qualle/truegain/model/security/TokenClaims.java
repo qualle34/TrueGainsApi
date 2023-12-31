@@ -18,6 +18,7 @@ public class TokenClaims {
     private String tokenId;
     private long userId;
     private String issuedBy;
+    private String type;
     private Date issuedAt;
     private Date accessExpiredAt;
     private Date refreshExpiredAt;

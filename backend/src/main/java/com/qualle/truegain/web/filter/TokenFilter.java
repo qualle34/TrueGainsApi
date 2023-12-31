@@ -52,11 +52,15 @@ public class TokenFilter extends OncePerRequestFilter {
                     roles = claims.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
                 }
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(tokenDetails, null, roles);
+                if (claims.getType().equals("access")) {
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(tokenDetails, null, roles);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+
             }
 
             filterChain.doFilter(request, response);

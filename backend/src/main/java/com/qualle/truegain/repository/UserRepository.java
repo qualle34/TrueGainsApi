@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query("SELECT u FROM User u INNER JOIN FETCH u.credentials c WHERE c.login LIKE :login")
@@ -26,7 +25,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query("FROM User u LEFT JOIN FETCH u.credentials c WHERE c.login LIKE :login OR c.email LIKE :email")
     List<User> findUserWithCredentialsByLoginOrEmail(String login, String email);
-
 
     @Modifying
     @Query("DELETE FROM Confirmation c WHERE :oldDate > c.createdAt")
