@@ -139,7 +139,7 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
             result.put(week.get("week").intValue(), week.get("count").intValue());
         }
 
-        for (int i = 1; i <= 52; i++) {
+        for (int i = 1; i <= 53; i++) { // 53 is number of weeks
             result.putIfAbsent(i, 0);
         }
         return result;
