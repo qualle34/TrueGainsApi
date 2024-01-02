@@ -3,6 +3,7 @@ package com.qualle.truegain.service;
 import com.qualle.truegain.api.MuscleDistributionChartDto;
 import com.qualle.truegain.api.SimpleWorkoutDto;
 import com.qualle.truegain.api.WorkoutDto;
+import com.qualle.truegain.api.WorkoutPerWeekDto;
 import com.qualle.truegain.service.basic.GenericService;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface WorkoutService extends GenericService<WorkoutDto, Long> {
 
     List<SimpleWorkoutDto> getRecentByUserIdWithLimit(long userId, int count);
 
-    Map<Integer, Integer> getCountByUserIdGroupByWeekNumber(long userId);
+    List<WorkoutPerWeekDto> getCountByUserIdGroupByWeekNumber(long userId);
 
     MuscleDistributionChartDto getMuscleDistributionChartData(long userId);
 

@@ -13,6 +13,7 @@ import com.qualle.truegain.service.basic.AbstractService;
 import com.qualle.truegain.service.mapper.CategoryMapper;
 import com.qualle.truegain.service.mapper.ExerciseMapper;
 import com.qualle.truegain.service.mapper.GenericMapper;
+import com.qualle.truegain.service.util.DateFormatUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
@@ -123,7 +124,7 @@ public class ExerciseServiceImpl extends AbstractService<Exercise, ExerciseDto, 
             LocalDateTime date = (LocalDateTime) map.get("date");
             Record record = (Record) map.get("record");
 
-            float dayNum = (float) date.toInstant(ZoneOffset.UTC).getEpochSecond() / 86400;
+            float dayNum = DateFormatUtil.getDayNumber(date);
             float load = record.getWeight() * record.getReps();
 
             if (load > maxLoad) {

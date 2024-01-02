@@ -4,6 +4,7 @@ import com.qualle.truegain.api.MeasureDto;
 import com.qualle.truegain.model.entity.Dimension;
 import com.qualle.truegain.model.entity.UserDimension;
 import com.qualle.truegain.service.mapper.DimensionMapper;
+import com.qualle.truegain.service.util.DateFormatUtil;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneOffset;
@@ -22,7 +23,7 @@ public class DimensionMapperImpl implements DimensionMapper {
         if (params.contains("user_measures") &&  dimension.getUserDimensions() != null) {
 
             dimension.getUserDimensions().forEach( d -> {
-                        float dayNum = (float) d.getDate().toInstant(ZoneOffset.UTC).getEpochSecond() / 86400;
+                        float dayNum = DateFormatUtil.getDayNumber(d.getDate());
                         data.put(dayNum, d.getValue());
                     }
             );
