@@ -12,7 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class MainPageDataDto {
 
-    private Map<Integer, Integer> workoutPerWeekChartData;
+    private List<WorkoutPerWeekDto> workoutPerWeekChartData;
     private List<SimpleWorkoutDto> recentWorkouts;
     private MuscleDistributionChartDto muscleDistributionChartData;
     private List<SimpleExerciseDto> frequentExercises;

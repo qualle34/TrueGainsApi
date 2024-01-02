@@ -6,8 +6,8 @@ import com.qualle.truegain.model.entity.User;
 import com.qualle.truegain.model.entity.Workout;
 import com.qualle.truegain.model.entity.Workout_;
 import com.qualle.truegain.model.entity.custom.LoadDistributionByCategories;
+import com.qualle.truegain.model.entity.custom.WorkoutCountPerWeek;
 import com.qualle.truegain.model.exception.BadRequestException;
-import com.qualle.truegain.repository.ExerciseRepository;
 import com.qualle.truegain.repository.WorkoutRepository;
 import com.qualle.truegain.repository.WorkoutSpecificationsRepository;
 import com.qualle.truegain.repository.specifications.WorkoutSpecifications;
@@ -25,10 +25,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,9 +67,6 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
                         .value(e.getRecords().stream().mapToDouble(r -> r.getReps() * r.getWeight()).sum()).build())
                 .collect(Collectors.toList());
 
-        List<WorkoutVolumeDto> volumeForBodyParts = new ArrayList<>(volumeForExercises);
-        dto.setVolumeForBodyParts(volumeForBodyParts); // todo
-
         volumeForExercises.add(0, new WorkoutVolumeDto("Overall", volumeForExercises.stream().mapToDouble(WorkoutVolumeDto::getValue).sum()));
         dto.setVolumeForExercises(volumeForExercises);
 
@@ -79,6 +80,18 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
         if (dto.getUserId() != userId) {
             throw new BadRequestException("Unable to load workout. Workout id is not valid", ErrorType.BAD_REQUEST);
         }
+
+        List<LoadDistributionByCategories> load = repository.findLoadByCategoryByUserIdAndWorkoutId(userId, id);
+
+        if (load == null || load.isEmpty()) {
+            return dto;
+        }
+
+        List<WorkoutVolumeDto> loadList = load.stream()
+                .map(k -> WorkoutVolumeDto.builder().name(k.getName()).value(k.getLoad()).build())
+                .toList();
+
+        dto.setVolumeForBodyParts(loadList);
 
         return dto;
     }
@@ -130,18 +143,24 @@ public class WorkoutServiceImpl extends AbstractService<Workout, WorkoutDto, Lon
     }
 
     @Override
-    public Map<Integer, Integer> getCountByUserIdGroupByWeekNumber(long userId) {
-        List<Map<String, Number>> workoutsWeekList = repository.findWorkoutCountByUserIdGroupByWeekNumber(userId);
+    public List<WorkoutPerWeekDto> getCountByUserIdGroupByWeekNumber(long userId) {
+        List<WorkoutCountPerWeek> workoutsWeekList = repository.findWorkoutCountByUserIdGroupByWeekNumber(userId);
 
-        Map<Integer, Integer> result = new HashMap<>();
+        List<WorkoutPerWeekDto> result = new ArrayList<>();
 
-        for (Map<String, Number> week : workoutsWeekList) {
-            result.put(week.get("week").intValue(), week.get("count").intValue());
+        for (WorkoutCountPerWeek week : workoutsWeekList) {
+            LocalDate monday = week.getDate().toLocalDate()
+                    .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+            int dayNum = (int) DateFormatUtil.getDayNumber(monday);
+
+            result.add(WorkoutPerWeekDto.builder()
+                    .week(week.getWeek())
+                    .day(dayNum)
+                    .count(week.getCount())
+                    .build());
         }
 
-        for (int i = 1; i <= 53; i++) { // 53 is number of weeks
-            result.putIfAbsent(i, 0);
-        }
         return result;
     }
 
